@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('እንዴት ማመልከት እንደሚቻል','How It Works') }} — {{ company_name }}{% endblock %}
+{% block content %}
+<section>
+  <div class="wrap">
+    <div class="section-head section-head--center">
+      <span class="kicker">{{ t('መመሪያ','Guide') }}</span>
+      <h1 style="font-size:30px">{{ t('እንዴት ማመልከት እንደሚቻል','How to Apply — Step by Step') }}</h1>
+      <p>{{ t('ከምዝገባ እስከ መነሳት ያለው ሙሉ ጉዞ','The full journey from registration to departure') }}</p>
+    </div>
+
+    {% set steps = [
+      ('user', t('1. ይመዝገቡ','1. Register'), t('በ5 ደቂቃ ውስጥ በመስመር ላይ ኢሜይል እና ስልክዎን በመጠቀም መለያ ይክፈቱ።','Create an account online in 5 minutes using your email and phone.')),
+      ('upload', t('2. ሰነድ ይስቀሉ','2. Upload Documents'), t('ፓስፖርት፣ ፎቶዎች እና የትምህርት ማስረጃዎን ይስቀሉ — ቡድናችን ያረጋግጣል።','Upload your passport, photos, and education certificates — our team verifies them.')),
+      ('briefcase', t('3. ከስራ ጋር ይጣመሩ','3. Get Matched'), t('ከክህሎትዎ እና ምርጫዎ ጋር ከሚስማማ የተረጋገጠ ቀጣሪ ጋር እናገናኝዎታለን።','We match you with a verified employer that fits your skills and preferences.')),
+      ('shield', t('4. የቪዛ እና ውል ሂደት','4. Visa & Contract'), t('የቪዛ ማመልከቻዎ ይዘጋጃል፣ ህጋዊ ውል ይፈርማሉ።','Your visa application is prepared, and you sign a legally sound contract.')),
+      ('plane', t('5. ይሰማሩ','5. Deploy'), t('በረራ ይያዛል፣ አቅጣጫ ስልጠና ይወስዳሉ፣ እና ጉዞዎን ይጀምራሉ — ድጋፋችንም ይቀጥላል።','Your flight is booked, you receive orientation training, and your journey begins — our support continues.')),
+    ] %}
+
+    <div class="timeline" style="max-width:640px;margin:0 auto">
+      {% for icon, title, desc in steps %}
+      <div class="timeline-item {{ 'done' if not loop.last else '' }}" style="padding-bottom:32px">
+        <div class="timeline-dot" style="width:40px;height:40px;background:var(--pro-blue-light);border-color:var(--pro-blue);color:var(--pro-blue)">{{ ic.icon(icon, 18) }}</div>
+        <div style="margin-left:8px">
+          <div class="timeline-title" style="font-size:17px;margin-bottom:6px">{{ title }}</div>
+          <div class="timeline-sub" style="font-size:14px;max-width:50ch">{{ desc }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div style="text-align:center;margin-top:20px">
+      <a href="{{ url_for('auth.register') }}" class="btn btn--primary">{{ t('አሁን ይመዝገቡ →','Register Now →') }}</a>
+    </div>
+  </div>
+</section>
+<style>
+.timeline-item .timeline-dot{left:0;top:0}
+.timeline-item{padding-left:52px}
+.timeline-item::before{left:19px}
+</style>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('ቃለ መጠይቆች','Interviews') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('ቃለ መጠይቆች','Interviews') }}{% endblock %}
+{% block page_subtitle %}{{ t('ከቀጣሪ ጋር ቀጠሮ ማስያዝ እና መከታተል','Schedule and track employer interviews') }}{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('አዲስ ቃለ መጠይቅ ይያዙ','Schedule an Interview') }}</h3></div>
+  <form method="post" class="panel__body">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px">
+      <div class="field" style="grid-column:span 2;margin-bottom:0"><label>{{ t('አመልካች','Applicant') }}</label>
+        <select name="applicant_id" required>
+          <option value="">—</option>
+          {% for a in applicants %}<option value="{{ a.id }}">{{ a.full_name }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ቀን እና ሰዓት','Date & Time') }}</label><input type="datetime-local" name="scheduled_at" required></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('አይነት','Mode') }}</label>
+        <select name="mode"><option value="video">Video</option><option value="phone">Phone</option><option value="in_person">In Person</option></select>
+      </div>
+      <div class="field" style="grid-column:1/-1;margin-bottom:0"><label>{{ t('ማስታወሻ (አማራጭ)','Notes (optional)') }}</label><input type="text" name="notes"></div>
+    </div>
+    <button type="submit" class="btn btn--primary">{{ ic.icon('clock',16) }} {{ t('ቀጠሮ ያዝ','Schedule') }}</button>
+  </form>
+</div>
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('መጪ ቃለ መጠይቆች','Upcoming Interviews') }}</h3><p>{{ upcoming|length }} {{ t('ተይዘዋል','scheduled') }}</p></div>
+  {% if upcoming %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('አመልካች','Applicant') }}</th><th>{{ t('ቀን/ሰዓት','Date/Time') }}</th><th>{{ t('አይነት','Mode') }}</th><th>{{ t('ማስታወሻ','Notes') }}</th><th>{{ t('እርምጃ','Action') }}</th></tr></thead>
+      <tbody>
+        {% for iv in upcoming %}
+        <tr>
+          <td class="row-person"><span class="avatar">{{ iv.applicant.full_name[0]|upper }}</span><span class="row-person__name">{{ iv.applicant.full_name }}</span></td>
+          <td>{{ iv.scheduled_at.strftime('%Y-%m-%d %H:%M') }}</td>
+          <td>{{ iv.mode }}</td>
+          <td>{{ iv.notes or '—' }}</td>
+          <td class="tbl-actions">
+            <form method="post" action="{{ url_for('admin.update_interview_status', interview_id=iv.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="status" value="completed"><button class="btn btn--sm btn--primary">{{ t('ተጠናቋል','Done') }}</button></form>
+            <form method="post" action="{{ url_for('admin.update_interview_status', interview_id=iv.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="status" value="cancelled"><button class="btn btn--sm btn--danger">{{ t('ሰርዝ','Cancel') }}</button></form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2"><div class="empty-state2__icon">{{ ic.icon('clock',24) }}</div><p>{{ t('ምንም የተያዘ ቃለ መጠይቅ የለም።','No interviews scheduled.') }}</p></div>
+  {% endif %}
+</div>
+
+{% if past %}
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('ያለፉ ቃለ መጠይቆች','Past Interviews') }}</h3></div>
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('አመልካች','Applicant') }}</th><th>{{ t('ቀን/ሰዓት','Date/Time') }}</th><th>{{ t('ሁኔታ','Status') }}</th></tr></thead>
+      <tbody>
+        {% for iv in past %}
+        <tr><td>{{ iv.applicant.full_name }}</td><td>{{ iv.scheduled_at.strftime('%Y-%m-%d %H:%M') }}</td><td><span class="pill pill-{{ iv.status }}"><span class="dot"></span>{{ iv.status }}</span></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

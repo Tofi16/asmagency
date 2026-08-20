@@ -1,0 +1,96 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('ዳሽቦርድ','Dashboard') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "applicant/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('እንኳን ደህና መጡ','Welcome back') }}, {{ applicant.full_name.split(' ')[0] }}{% endblock %}
+{% block page_subtitle %}{{ t('የማመልከቻዎ ደረጃ:','Your pipeline status:') }} {{ applicant.pipeline_label(current_lang) }}{% endblock %}
+
+{% block content %}
+{% set pct = applicant.pipeline_progress_percent() %}
+{% set circumference = 339.29 %}
+{% set offset = circumference - (circumference * pct / 100) %}
+
+<div class="panel">
+  <div class="panel__body" style="display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+    <div class="ring">
+      <svg width="132" height="132">
+        <circle class="ring__track" cx="66" cy="66" r="54"></circle>
+        <circle class="ring__fill" cx="66" cy="66" r="54" stroke-dasharray="{{ circumference }}" stroke-dashoffset="{{ offset }}"></circle>
+      </svg>
+      <div class="ring__label"><span class="num">{{ pct }}%</span><span class="txt">{{ t('ተጠናቋል','Complete') }}</span></div>
+    </div>
+    <div style="flex:1;min-width:240px">
+      <p class="subhead" style="margin-bottom:6px">{{ t('የአሁኑ ደረጃ','Current Stage') }}</p>
+      <h2 style="font-size:22px;margin-bottom:10px">{{ applicant.pipeline_label(current_lang) }}</h2>
+      <p style="color:var(--ink-muted);font-size:14px;max-width:48ch">{{ t('የማመልከቻ ሂደትዎ በቀጥታ እየተከታተለ ነው። ማንኛውም ለውጥ ሲኖር በኢሜይል ወይም በኤስኤምኤስ ይደርስዎታል።','Your application is being actively tracked. You\'ll be notified by SMS or email the moment anything changes.') }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="stat-cards2">
+  <div class="stat-card2">
+    <div class="stat-card2__top"><div class="stat-card2__icon amber">{{ ic.icon('clock',18) }}</div></div>
+    <div class="stat-card2__num" data-count-to="{{ pending_docs }}">0</div>
+    <div class="stat-card2__label">{{ t('በመጠባበቅ ላይ ሰነዶች','Pending Documents') }}</div>
+  </div>
+  <div class="stat-card2">
+    <div class="stat-card2__top"><div class="stat-card2__icon blue">{{ ic.icon('file',18) }}</div></div>
+    <div class="stat-card2__num" data-count-to="{{ applicant.applications.count() }}">0</div>
+    <div class="stat-card2__label">{{ t('ጠቅላላ ማመልከቻዎች','Total Applications') }}</div>
+  </div>
+  <div class="stat-card2">
+    <div class="stat-card2__top"><div class="stat-card2__icon green">{{ ic.icon('upload',18) }}</div></div>
+    <div class="stat-card2__num" data-count-to="{{ applicant.documents.count() }}">0</div>
+    <div class="stat-card2__label">{{ t('የተሰቀሉ ሰነዶች','Documents Uploaded') }}</div>
+  </div>
+  <div class="stat-card2">
+    <div class="stat-card2__top"><div class="stat-card2__icon red">{{ ic.icon('card',18) }}</div></div>
+    <div class="stat-card2__num" data-count-to="{{ applicant.payments.count() }}">0</div>
+    <div class="stat-card2__label">{{ t('ክፍያዎች','Payments') }}</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1.3fr 1fr;gap:22px;align-items:start">
+  <div class="panel">
+    <div class="panel__head"><h3>{{ t('የቅርብ ጊዜ ማመልከቻዎች','Recent Applications') }}</h3>
+      <a href="{{ url_for('applicant.applications') }}" class="btn btn--ghost btn--sm">{{ t('ሁሉንም ይመልከቱ','View all') }}</a>
+    </div>
+    {% if recent_apps %}
+    <div class="table-wrap">
+      <table class="tbl2">
+        <thead><tr><th>{{ t('ስራ','Job') }}</th><th>{{ t('ሁኔታ','Status') }}</th><th>{{ t('ቀን','Date') }}</th></tr></thead>
+        <tbody>
+          {% for a in recent_apps %}
+          <tr><td>{{ a.job.title(current_lang) }}</td><td><span class="pill pill-{{ a.status }}"><span class="dot"></span>{{ a.status }}</span></td><td>{{ a.submitted_at.strftime('%Y-%m-%d') }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="empty-state2">
+      <div class="empty-state2__icon">{{ ic.icon('file',24) }}</div>
+      <p>{{ t('እስካሁን ምንም ማመልከቻ የለም።','No applications yet.') }}</p>
+      <a href="{{ url_for('main.jobs') }}" class="btn btn--primary btn--sm">{{ t('ስራ ይፈልጉ','Browse jobs') }}</a>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="panel">
+    <div class="panel__head"><h3>{{ t('የሂደት መስመር','Pipeline Timeline') }}</h3></div>
+    <div class="panel__body">
+      <div class="timeline">
+        {% set stages_am = {'registered':'ተመዝግቧል','screening':'ማጣሪያ','matched':'ተጣምሯል','visa_processing':'የቪዛ ሂደት','contract':'ውል','travel_ready':'ለጉዞ ዝግጁ','deployed':'ተሰማርቷል'} %}
+        {% set stages_en = {'registered':'Registered','screening':'Screening','matched':'Matched','visa_processing':'Visa Processing','contract':'Contract','travel_ready':'Travel Ready','deployed':'Deployed'} %}
+        {% set current_idx = applicant.PIPELINE_STAGES.index(applicant.pipeline_status) %}
+        {% for stage in applicant.PIPELINE_STAGES %}
+        {% set i = loop.index0 %}
+        <div class="timeline-item {{ 'done' if i < current_idx else ('current' if i == current_idx else '') }}">
+          <div class="timeline-dot">{% if i < current_idx %}{{ ic.icon('check',12) }}{% endif %}</div>
+          <div class="timeline-title">{{ t(stages_am[stage], stages_en[stage]) }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('ማረጋገጫ','Verification') }} — {{ company_name }}{% endblock %}
+{% block content %}
+<section>
+  <div class="wrap" style="max-width:560px">
+    {% if profile %}
+    <div class="panel" style="border:2px solid var(--success);text-align:center;padding:8px">
+      <div style="padding:32px 24px">
+        <div style="width:64px;height:64px;border-radius:50%;background:#e9f8f1;color:var(--success);display:flex;align-items:center;justify-content:center;margin:0 auto 18px">{{ ic.icon('check',30) }}</div>
+        <h1 style="font-size:22px;margin-bottom:6px">{{ t('የተረጋገጠ ማመልከቻ','Verified Application') }}</h1>
+        <p style="color:var(--ink-muted);font-size:14px;margin-bottom:24px">{{ t('ይህ ማመልከቻ በ','This application is on file with') }} {{ company_name }}</p>
+
+        <div style="background:var(--canvas);border-radius:12px;padding:20px;text-align:left">
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span style="color:var(--ink-muted);font-size:13px">{{ t('ማመልከቻ ቁጥር','Application No.') }}</span><strong>#{{ profile.application_no }}</strong></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span style="color:var(--ink-muted);font-size:13px">{{ t('ስም','Name') }}</span><strong>{{ profile.applicant.full_name }}</strong></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)"><span style="color:var(--ink-muted);font-size:13px">{{ t('የተመለከተው ስራ','Post Applied For') }}</span><strong>{{ profile.post_applied_for or '—' }}</strong></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 0"><span style="color:var(--ink-muted);font-size:13px">{{ t('ሁኔታ','Status') }}</span><span class="pill pill-{{ profile.applicant.pipeline_status }}"><span class="dot"></span>{{ profile.applicant.pipeline_status }}</span></div>
+        </div>
+
+        <p style="color:var(--ink-muted);font-size:12px;margin-top:20px">{{ t('ጥያቄ ካለዎት እባክዎ ኤጀንሲውን በቀጥታ ያግኙ።','If you have questions, please contact the agency directly.') }}</p>
+      </div>
+    </div>
+    {% else %}
+    <div class="panel" style="border:2px solid var(--trust-red);text-align:center;padding:8px">
+      <div style="padding:32px 24px">
+        <div style="width:64px;height:64px;border-radius:50%;background:#fdeced;color:var(--trust-red);display:flex;align-items:center;justify-content:center;margin:0 auto 18px">{{ ic.icon('x',30) }}</div>
+        <h1 style="font-size:22px;margin-bottom:6px">{{ t('አልተገኘም','Not Found') }}</h1>
+        <p style="color:var(--ink-muted);font-size:14px">{{ t('ማመልከቻ ቁጥር','Application number') }} <strong>#{{ application_no }}</strong> {{ t('በስርዓታችን ውስጥ አልተገኘም። ቀጥታ ኤጀንሲውን ያግኙ።','was not found in our system. Please contact the agency directly.') }}</p>
+      </div>
+    </div>
+    {% endif %}
+
+    <div style="text-align:center;margin-top:20px">
+      <a href="{{ url_for('main.contact') }}" class="btn btn--ghost">{{ ic.icon('bell',14) }} {{ t('አግኙን','Contact Us') }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

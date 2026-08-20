@@ -1,0 +1,60 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('CV ገንቢ','CV Builder') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('CV ገንቢ','CV Builder') }}{% endblock %}
+{% block page_subtitle %}{{ t('ለቀጣሪዎች የሚላክ ፕሮፌሽናል CV ይፍጠሩ','Create professional employer-facing CVs') }}{% endblock %}
+
+{% block content %}
+{% if applicants_without_cv %}
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('CV ገና ላልተፈጠረላቸው','Applicants Without a CV Yet') }}</h3></div>
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('አመልካች','Applicant') }}</th><th>{{ t('ኢሜይል','Email') }}</th><th>{{ t('ደረጃ','Stage') }}</th><th></th></tr></thead>
+      <tbody>
+        {% for a in applicants_without_cv %}
+        <tr>
+          <td class="row-person"><span class="avatar">{{ a.full_name[0] | upper }}</span><span class="row-person__name">{{ a.full_name }}</span></td>
+          <td>{{ a.user.email }}</td>
+          <td><span class="pill pill-{{ a.pipeline_status }}"><span class="dot"></span>{{ a.pipeline_status }}</span></td>
+          <td><a href="{{ url_for('admin.cv_form', applicant_id=a.id) }}" class="btn btn--sm btn--primary">{{ ic.icon('file',14) }} {{ t('CV ፍጠር','Create CV') }}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('የተፈጠሩ CVዎች','CVs on File') }}</h3></div>
+  {% if profiles %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('ማመልከቻ ቁ.','App. No') }}</th><th>{{ t('አመልካች','Applicant') }}</th><th>{{ t('የተመለከተው ስራ','Post Applied For') }}</th><th>{{ t('አጋር','Partner') }}</th><th>{{ t('እርምጃ','Actions') }}</th></tr></thead>
+      <tbody>
+        {% for p in profiles %}
+        <tr>
+          <td style="font-family:'Poppins';font-weight:700">#{{ p.application_no }}</td>
+          <td class="row-person"><span class="avatar">{{ p.applicant.full_name[0] | upper }}</span><span class="row-person__name">{{ p.applicant.full_name }}</span></td>
+          <td>{{ p.post_applied_for or '—' }}</td>
+          <td>{{ p.partner.name if p.partner else '—' }}</td>
+          <td class="tbl-actions">
+            <a href="{{ url_for('admin.cv_form', applicant_id=p.applicant_id) }}" class="btn btn--sm btn--ghost">{{ ic.icon('file',14) }} {{ t('CV ገንቢ ክፈት','Open CV Builder') }}</a>
+            <a href="{{ url_for('admin.cv_export_docx', applicant_id=p.applicant_id) }}" class="btn btn--sm btn--ghost">{{ ic.icon('upload',14) }} {{ t('Word','Word') }}</a>
+            <a href="{{ url_for('admin.cv_print', applicant_id=p.applicant_id) }}" target="_blank" class="btn btn--sm btn--primary">{{ ic.icon('file',14) }} {{ t('አትም','Print / PDF') }}</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2">
+    <div class="empty-state2__icon">{{ ic.icon('file',24) }}</div>
+    <p>{{ t('ገና ምንም CV አልተፈጠረም።','No CVs created yet.') }}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

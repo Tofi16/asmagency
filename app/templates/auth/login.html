@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{{ t('ግባ','Log In') }} — {{ company_name }}{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-card">
+    <h1>{{ t('ግባ','Welcome back') }}</h1>
+    <p class="sub">{{ t('የተጠቃሚ ስም ወይም ኢሜይል ያስገቡ','Enter your username or email to log in') }}</p>
+    <form method="post" novalidate>
+      {{ form.hidden_tag() }}
+      <div class="field">
+        {{ form.identifier.label }}
+        {{ form.identifier(placeholder=t('የተጠቃሚ ስም ወይም you@example.com','username or you@example.com')) }}
+        {% for err in form.identifier.errors %}<div class="field-error">{{ err }}</div>{% endfor %}
+      </div>
+      <div class="field">
+        {{ form.password.label }}
+        {{ form.password(placeholder="••••••••") }}
+        {% for err in form.password.errors %}<div class="field-error">{{ err }}</div>{% endfor %}
+      </div>
+      <div class="field checkbox" style="display:flex;justify-content:space-between;align-items:center">
+        <span>{{ form.remember() }} {{ form.remember.label }}</span>
+        <a href="{{ url_for('auth.forgot_password') }}" style="font-size:13.5px;font-weight:600">{{ t('የይለፍ ቃል ረሱ?','Forgot password?') }}</a>
+      </div>
+      {{ form.submit(class="btn btn--primary btn--block") }}
+    </form>
+    <p class="form-foot">{{ t('አካውንት የለዎትም?','Don\'t have an account?') }} <a href="{{ url_for('auth.register') }}">{{ t('ይመዝገቡ','Register') }}</a></p>
+  </div>
+</div>
+{% endblock %}

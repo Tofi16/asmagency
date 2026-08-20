@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ company_name }} — {{ t('ወደ ውጭ ሀገር ስራ በአስተማማኝ መንገድ','Your Path to Overseas Work') }}{% endblock %}
+{% block content %}
+
+<section class="home-hero">
+  <div class="wrap">
+    <div>
+      <span class="home-hero__eyebrow"><span class="dot"></span>{{ t('በሚኒስቴር ደረጃ የተመዘገበ ኤጀንሲ','Ministry-Licensed Employment Agency') }}</span>
+      <h1>
+        {{ t('ወደ ውጭ ሀገር ስራ','Your Path to Overseas Work') }}
+        <span class="accent">{{ t('በአስተማማኝ መንገድ','— Secure and Transparent') }}</span>
+      </h1>
+      <p class="lead">
+        {{ t('ከምዝገባ እስከ መነሳት ድረስ፣ እያንዳንዱን እርምጃ ግልጽ በሆነ ስርዓት ውስጥ እናግዝዎታለን። ድብቅ ክፍያ የለም።',
+             'From registration to departure, we walk with you through a fully transparent system. No hidden fees.') }}
+      </p>
+      <div class="home-hero__actions">
+        <a href="{{ url_for('auth.register') }}" class="btn btn--primary">{{ t('ምዝገባ ጀምር →','Start Your Application →') }}</a>
+        <a href="{{ url_for('main.jobs') }}" class="btn btn--onblue">{{ t('ስራዎችን ይመልከቱ','Browse Jobs') }}</a>
+      </div>
+      <div class="home-hero__stats">
+        <div><div class="home-hero__stat-num" data-count-to="1247" data-count-suffix="+">0</div><div class="home-hero__stat-label">{{ t('የተመዘገቡ አመልካቾች','Registered Applicants') }}</div></div>
+        <div><div class="home-hero__stat-num" data-count-to="89">0</div><div class="home-hero__stat-label">{{ t('በወር የተሰማሩ','Deployed / Month') }}</div></div>
+        <div><div class="home-hero__stat-num">24/7</div><div class="home-hero__stat-label">{{ t('የአስቸኳይ ጊዜ ድጋፍ','Emergency Support') }}</div></div>
+      </div>
+    </div>
+
+    <div class="home-hero__visual">
+      <div class="home-hero__glow"></div>
+      <div class="home-hero__logo-card">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="ASM Foreign Employment Agency">
+        <div class="home-hero__badge">{{ ic.icon('shield',14) }} {{ t('ፍቃድ ያለው','Licensed & Verified') }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if partners %}
+<div class="partners-strip">
+  <div class="wrap">
+    <p class="partners-strip__label">{{ t('ከእነዚህ አጋር ኤጀንሲዎች ጋር በመተባበር','In Partnership With') }}</p>
+    <div class="partners-strip__row">
+      {% for p in partners %}
+      <span class="partner-chip">{{ ic.icon('shield',18) }} {{ p.name }}</span>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="trust-badges-strip">
+  <div class="wrap">
+    <div class="trust-badges-strip__row">
+      <span class="trust-badge">{{ ic.icon('shield',18) }} {{ t('የሚኒስቴር ፍቃድ','Ministry Licensed') }}</span>
+      <span class="trust-badge">{{ ic.icon('check-sq',18) }} {{ t('የተረጋገጠ አጋር መረብ','Verified Partner Network') }}</span>
+      <span class="trust-badge">{{ ic.icon('user',18) }} {{ t('ደህንነቱ የተጠበቀ ውሂብ','Secure Applicant Data') }}</span>
+      <span class="trust-badge">{{ ic.icon('clock',18) }} {{ t('24/7 ድጋፍ','24/7 Support') }}</span>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head section-head--center" data-reveal>
+      <span class="kicker">{{ t('ግልጽነት','Transparency') }}</span>
+      <h2>{{ t('እያንዳንዱ ደረጃ ግልጽ ነው','Every Stage Is Visible to You') }}</h2>
+    </div>
+    <div class="pipeline" data-reveal>
+      <div class="pipeline__track">
+        {% set stages_am = ['ተመዝግቧል','ማጣሪያ','ተጣምሯል','የቪዛ ሂደት','ውል','ለጉዞ ዝግጁ','ተሰማርቷል'] %}
+        {% set stages_en = ['Registered','Screening','Matched','Visa Processing','Contract','Travel Ready','Deployed'] %}
+        {% for i in range(7) %}
+        <div class="pipeline__stage {{ 'is-done' if i < 2 else ('is-current' if i == 2 else '') }}">
+          <div class="pipeline__line"></div>
+          <div class="pipeline__node">{{ i + 1 }}</div>
+          <div class="pipeline__label">{{ t(stages_am[i], stages_en[i]) }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">{{ t('አገልግሎቶቻችን','Our Services') }}</span>
+      <h2>{{ t('ከመመዝገብ እስከ መነሳት ሙሉ ድጋፍ','Full Support, Start to Departure') }}</h2>
+    </div>
+    <div class="grid-3" data-reveal="stagger">
+      <div class="card"><div class="card__icon">{{ ic.icon('check-sq',20) }}</div><h3>{{ t('ምዝገባ እና ማረጋገጫ','Registration & Verification') }}</h3><p>{{ t('ሰነዶችዎን በደህንነት እናረጋግጣለን።','We securely verify your documents.') }}</p></div>
+      <div class="card"><div class="card__icon">{{ ic.icon('briefcase',20) }}</div><h3>{{ t('የስራ ማጣመድ','Job Matching') }}</h3><p>{{ t('ከክህሎትዎ ጋር የሚስማማ አሰሪ እናገናኝዎታለን።','We match you with a verified employer.') }}</p></div>
+      <div class="card"><div class="card__icon">{{ ic.icon('shield',20) }}</div><h3>{{ t('የቪዛ እና ውል ሂደት','Visa & Contract') }}</h3><p>{{ t('ህጋዊ ውል በባለሙያ ቡድናችን ይዘጋጃል።','Our team prepares a legally sound contract.') }}</p></div>
+    </div>
+  </div>
+</section>
+
+{% if open_countries %}
+<section style="background:#fff">
+  <div class="wrap">
+    <div class="section-head section-head--center" data-reveal>
+      <span class="kicker">{{ t('የስራ መዳረሻ','Destinations') }}</span>
+      <h2>{{ t('የት ሀገራት እንሰማራለን','Where We Place Workers') }}</h2>
+    </div>
+    {% set flags = {'UAE':'🇦🇪','Saudi Arabia':'🇸🇦','Qatar':'🇶🇦','Kuwait':'🇰🇼','Lebanon':'🇱🇧','Bahrain':'🇧🇭','Oman':'🇴🇲','Jordan':'🇯🇴'} %}
+    <div class="grid-3" data-reveal="stagger">
+      {% for c in open_countries %}
+      <a href="{{ url_for('main.jobs', country=c.country) }}" class="card" style="text-decoration:none;display:flex;align-items:center;gap:14px">
+        <span style="font-size:32px">{{ flags.get(c.country, '🌍') }}</span>
+        <div>
+          <h3 style="margin-bottom:2px">{{ c.country }}</h3>
+          <p style="color:var(--pro-blue);font-weight:700;font-size:13.5px">{{ c.positions }} {{ t('ክፍት ቦታዎች','open positions') }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section>
+  <div class="wrap">
+    <div class="section-head section-head--center" data-reveal>
+      <span class="kicker">{{ t('የስኬት ታሪኮች','Success Stories') }}</span>
+      <h2>{{ t('ከደንበኞቻችን ልምድ','What Our Applicants Say') }}</h2>
+      <p>{{ t('[ይሄ ክፍል ለእውነተኛ የደንበኞች ምስክርነት የተዘጋጀ ነው — እውነተኛ ታሪኮችዎን እዚህ ያክሉ]','[This section is ready for real client testimonials — add your genuine success stories here]') }}</p>
+    </div>
+    <div class="grid-3" data-reveal="stagger">
+      {% for initials in ['S.T.', 'M.A.', 'B.K.'] %}
+      <div class="card">
+        <div style="display:flex;gap:3px;color:var(--gold,#C88A1E);margin-bottom:12px">★★★★★</div>
+        <p style="color:var(--ink-muted);font-size:14px;margin-bottom:16px;font-style:italic">{{ t('"[የደንበኛ ምስክርነት ጥቅስ እዚህ ይገባል]"','"[Client testimonial quote goes here]"') }}</p>
+        <p style="font-weight:700;font-size:13.5px">{{ initials }} <span style="color:var(--ink-muted);font-weight:500">— {{ t('የተሰማራ/ች','Deployed') }}</span></p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="card" data-reveal style="background:linear-gradient(120deg,var(--trust-red),var(--trust-red-dark));color:#fff;padding:44px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px;border:none">
+      <div>
+        <h2>{{ t('ዛሬ ጉዞዎን ይጀምሩ','Start Your Journey Today') }}</h2>
+        <p style="color:rgba(255,255,255,.85)">{{ t('ምዝገባው 5 ደቂቃ ብቻ ይወስዳል።','Registration takes 5 minutes.') }}</p>
+      </div>
+      <a href="{{ url_for('auth.register') }}" class="btn btn--onblue">{{ t('አሁን ተመዝገብ →','Register Now →') }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

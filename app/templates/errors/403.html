@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}403{% endblock %}
+{% block content %}
+<section><div class="wrap" style="text-align:center;padding:60px 20px">
+  <h1 style="font-size:64px;color:var(--trust-red)">403</h1>
+  <p style="color:var(--ink-muted);margin:12px 0 24px">{{ t('ወደዚህ ገጽ የመድረስ ፍቃድ የለዎትም።','You don\'t have permission to access this page.') }}</p>
+  <a href="{{ url_for('main.index') }}" class="btn btn--primary">{{ t('ወደ ቤት ገጽ','Back to Home') }}</a>
+</div></section>
+{% endblock %}

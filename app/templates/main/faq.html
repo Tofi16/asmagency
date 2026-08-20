@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ t('በተደጋጋሚ የሚጠየቁ ጥያቄዎች','FAQ') }} — {{ company_name }}{% endblock %}
+{% block content %}
+<section>
+  <div class="wrap" style="max-width:760px">
+    <div class="section-head section-head--center">
+      <span class="kicker">{{ t('እገዛ','Help') }}</span>
+      <h1 style="font-size:30px">{{ t('በተደጋጋሚ የሚጠየቁ ጥያቄዎች','Frequently Asked Questions') }}</h1>
+    </div>
+
+    {% set faqs = [
+      (t('ምዝገባ ምን ያህል ጊዜ ይወስዳል?','How long does registration take?'),
+       t('የመስመር ላይ ምዝገባ 5 ደቂቃ ያህል ይወስዳል። ከዚያ በኋላ ቡድናችን በ24 ሰዓት ውስጥ ያገኝዎታል።','Online registration takes about 5 minutes. Our team then reaches out within 24 hours.')),
+      (t('ምን ያህል ክፍያ ያስከፍላል?','What does it cost?'),
+       t('ክፍያ እንደ ስራው አይነት እና መዳረሻ ሀገር ይለያያል፣ ነገር ግን ግልጽ ነው — ምንም ድብቅ ክፍያ የለም። ትክክለኛ ዋጋ ከቡድናችን ጋር ሲነጋገሩ ያገኛሉ።','Fees vary by job type and destination country, but are always transparent — no hidden charges. You will get exact pricing when you speak with our team.')),
+      (t('የቪዛ ሂደት ምን ያህል ይፈጃል?','How long does the visa process take?'),
+       t('በተለምዶ ከምዝገባ እስከ መነሳት 2-4 ወራት ይወስዳል፣ እንደ መዳረሻ ሀገር እና የሰነድ ዝግጁነት ይለያያል።','It typically takes 2-4 months from registration to departure, depending on the destination country and how quickly documents are ready.')),
+      (t('ምን ሰነዶች ያስፈልጉኛል?','What documents do I need?'),
+       t('ፓስፖርት፣ የቁም ፎቶ፣ ጉርድ ፎቶ፣ የትምህርት ማስረጃ እና የስራ ልምድ ማስረጃ (ካለ) ያስፈልጋሉ። ሙሉ ዝርዝር ከታች ባለው Checklist ይመልከቱ።','You will need a passport, a portrait photo, a full-length photo, education certificates, and work experience letters (if any). See the full checklist below.')),
+      (t('ከተሰማራሁ በኋላ ድጋፍ አገኛለሁ?','Do I get support after deployment?'),
+       t('አዎ፣ 24/7 የአስቸኳይ ጊዜ የድጋፍ መስመር አለን፣ እና ኤጀንሲው ከቀጣሪው ጋር ባለው ስምምነት መሰረት ክትትል ያደርጋል።','Yes — we run a 24/7 emergency support line, and the agency stays in touch based on the agreement with your employer.')),
+      (t('ማመልከቻዬ የት ደረጃ ላይ እንዳለ እንዴት አውቃለሁ?','How do I know what stage my application is at?'),
+       t('ወደ መለያዎ ሲገቡ ዳሽቦርድ ላይ ቀጥታ የማመልከቻዎን ደረጃ ማየት ይችላሉ።','Once logged in, you can see your application stage directly on your dashboard.')),
+    ] %}
+
+    <div style="display:flex;flex-direction:column;gap:12px">
+      {% for q, a in faqs %}
+      <details class="card" style="padding:0">
+        <summary style="padding:18px 22px;cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center">
+          {{ q }} <span style="color:var(--pro-blue);font-size:20px;flex-shrink:0;margin-left:12px">+</span>
+        </summary>
+        <p style="padding:0 22px 18px;color:var(--ink-muted);font-size:14.5px">{{ a }}</p>
+      </details>
+      {% endfor %}
+    </div>
+
+    <div class="card" style="margin-top:28px;text-align:center;background:var(--pro-blue-light);border:none">
+      <p style="font-weight:700;margin-bottom:10px">{{ t('ተጨማሪ ጥያቄ አለዎት?','Still have questions?') }}</p>
+      <a href="{{ url_for('main.contact') }}" class="btn btn--primary">{{ t('አግኙን','Contact Us') }}</a>
+    </div>
+  </div>
+</section>
+<style>
+details summary::-webkit-details-marker{display:none}
+details[open] summary span{transform:rotate(45deg)}
+</style>
+{% endblock %}

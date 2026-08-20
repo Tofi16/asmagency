@@ -1,0 +1,8 @@
+{% import "_icons.html" as ic %}
+<div class="nav-section">{{ t('ዋና','Main') }}</div>
+<a href="{{ url_for('applicant.dashboard') }}" class="nav-item {{ 'active' if request.endpoint=='applicant.dashboard' }}">{{ ic.icon('home') }}<span>{{ t('ዳሽቦርድ','Dashboard') }}</span></a>
+<a href="{{ url_for('applicant.profile') }}" class="nav-item {{ 'active' if request.endpoint=='applicant.profile' }}">{{ ic.icon('user') }}<span>{{ t('መገለጫ','Profile') }}</span></a>
+<a href="{{ url_for('applicant.applications') }}" class="nav-item {{ 'active' if request.endpoint=='applicant.applications' }}">{{ ic.icon('file') }}<span>{{ t('ማመልከቻዎች','Applications') }}</span></a>
+<a href="{{ url_for('applicant.uploads') }}" class="nav-item {{ 'active' if request.endpoint=='applicant.uploads' }}">{{ ic.icon('upload') }}<span>{{ t('ሰነዶች','Documents') }}</span>{% if pending_docs %}<span class="nav-badge">{{ pending_docs }}</span>{% endif %}</a>
+<div class="nav-section">{{ t('ፍለጋ','Explore') }}</div>
+<a href="{{ url_for('main.jobs') }}" class="nav-item">{{ ic.icon('briefcase') }}<span>{{ t('ስራ ፈልግ','Browse Jobs') }}</span></a>

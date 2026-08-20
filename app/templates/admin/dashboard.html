@@ -1,0 +1,159 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('አድሚን ዳሽቦርድ','Admin Dashboard') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('አድሚን ዳሽቦርድ','Admin Dashboard') }}{% endblock %}
+{% block page_subtitle %}{{ t('የኤጀንሲው አጠቃላይ እይታ','Agency-wide overview') }}{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="stat-cards2">
+  <div class="stat-card2">
+    <div class="stat-card2__top"><div class="stat-card2__icon blue">{{ ic.icon('users',18) }}</div><span class="stat-card2__trend">{{ ic.icon('trend-up',11) }} {{ t('ገባሪ','active') }}</span></div>
+    <div class="stat-card2__num" data-count-to="{{ stats.total_users }}">0</div>
+    <div class="stat-card2__label">{{ t('ጠቅላላ ተጠቃሚዎች','Total Users') }}</div>
+  </div>
+  <div class="stat-card2">
+    <div class="stat-card2__top"><div class="stat-card2__icon amber">{{ ic.icon('clock',18) }}</div></div>
+    <div class="stat-card2__num" data-count-to="{{ stats.pending_docs }}">0</div>
+    <div class="stat-card2__label">{{ t('በመጠባበቅ ላይ ሰነዶች','Pending Documents') }}</div>
+  </div>
+  <div class="stat-card2">
+    <div class="stat-card2__top"><div class="stat-card2__icon green">{{ ic.icon('plane',18) }}</div></div>
+    <div class="stat-card2__num" data-count-to="{{ stats.deployed_total }}">0</div>
+    <div class="stat-card2__label">{{ t('የተሰማሩ ጠቅላላ','Total Deployed') }}</div>
+  </div>
+  <div class="stat-card2">
+    <div class="stat-card2__top"><div class="stat-card2__icon red">{{ ic.icon('card',18) }}</div></div>
+    <div class="stat-card2__num" data-count-to="{{ stats.revenue_total }}" data-count-decimals="0">0</div>
+    <div class="stat-card2__label">{{ t('ጠቅላላ ገቢ (ETB)','Total Revenue (ETB)') }}</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1.3fr 1fr;gap:22px;align-items:start;margin-bottom:24px">
+  <div class="panel" style="margin-bottom:0">
+    <div class="panel__head">
+      <h3>{{ t('ወርሃዊ ምዝገባ አዝማሚያ','Monthly Registration Trend') }}</h3>
+      <p>{{ t('ላለፉት 6 ወራት','Last 6 months') }}</p>
+    </div>
+    <div class="panel__body"><canvas id="growthChart" height="110"></canvas></div>
+  </div>
+
+  <div class="panel" style="margin-bottom:0">
+    <div class="panel__head">
+      <h3>{{ t('በሀገር የተሰማሩ','Deployed by Country') }}</h3>
+    </div>
+    <div class="panel__body">
+      {% if country_labels %}
+      <canvas id="countryChart" height="130"></canvas>
+      {% else %}
+      <div class="empty-state2">
+        <div class="empty-state2__icon">{{ ic.icon('plane',22) }}</div>
+        <p>{{ t('እስካሁን ማንም አልተሰማራም።','No deployments yet.') }}</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel__head">
+    <h3>{{ t('የማመልከቻ ሂደት ስርጭት','Pipeline Distribution') }}</h3>
+    <a href="{{ url_for('admin.applicants') }}" class="btn btn--ghost btn--sm">{{ t('ሁሉንም አመልካቾች','Manage applicants') }}</a>
+  </div>
+  <div class="panel__body">
+    {% set total = pipeline_counts.values() | sum %}
+    {% set colors = {'registered':'#4A90D9','screening':'#8FC1F0','matched':'#1E8A5F','visa_processing':'#C88A1E','contract':'#C41E3A','travel_ready':'#9c1830','deployed':'#1A1A2E'} %}
+    {% if total > 0 %}
+      {% set ns = namespace(acc=0, stops=[]) %}
+      {% for stage in stages %}
+        {% set count = pipeline_counts.get(stage, 0) %}
+        {% set pct = (count / total * 100) if total else 0 %}
+        {% set start = ns.acc %}
+        {% set ns.acc = ns.acc + pct %}
+        {% set ns.stops = ns.stops + [colors[stage] ~ ' ' ~ start ~ '% ' ~ ns.acc ~ '%'] %}
+      {% endfor %}
+      <div class="donut-row">
+        <div class="donut" style="background:conic-gradient({{ ns.stops | join(', ') }})">
+          <div class="donut__hole"><span class="num">{{ total }}</span><span class="txt">{{ t('አመልካቾች','applicants') }}</span></div>
+        </div>
+        <div class="legend">
+          {% for stage in stages %}
+          <div class="legend-item">
+            <span class="swatch" style="background:{{ colors[stage] }}"></span>
+            <span>{{ stage }}</span>
+            <span class="val">{{ pipeline_counts.get(stage, 0) }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+    <div class="empty-state2">
+      <div class="empty-state2__icon">{{ ic.icon('users',24) }}</div>
+      <p>{{ t('ገና ምንም አመልካች አልተመዘገበም።','No applicants registered yet.') }}</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const growthCtx = document.getElementById('growthChart');
+if (growthCtx) {
+  new Chart(growthCtx, {
+    type: 'line',
+    data: {
+      labels: {{ month_labels | tojson }},
+      datasets: [{
+        label: '{{ t("አዲስ ምዝገባዎች","New Registrations") }}',
+        data: {{ month_counts | tojson }},
+        borderColor: '#4A90D9',
+        backgroundColor: 'rgba(74,144,217,.12)',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#4A90D9',
+        pointRadius: 4,
+        tension: 0.35,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#E2E6ED' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+
+const countryCtx = document.getElementById('countryChart');
+if (countryCtx) {
+  new Chart(countryCtx, {
+    type: 'bar',
+    data: {
+      labels: {{ country_labels | tojson }},
+      datasets: [{
+        label: '{{ t("የተሰማሩ","Deployed") }}',
+        data: {{ country_counts | tojson }},
+        backgroundColor: '#C41E3A',
+        borderRadius: 6,
+        maxBarThickness: 42,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#E2E6ED' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+</script>
+{% endblock %}

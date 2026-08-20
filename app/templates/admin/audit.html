@@ -1,0 +1,31 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('የእንቅስቃሴ ማስታወሻ','Audit Log') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('የእንቅስቃሴ ማስታወሻ','Audit Log') }}{% endblock %}
+{% block page_subtitle %}{{ t('ማን ምን መቼ እንደለወጠ (የቅርብ 150)','Who changed what, and when (latest 150)') }}{% endblock %}
+
+{% block content %}
+<div class="panel">
+  {% if entries %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('ተዋናይ','Actor') }}</th><th>{{ t('እርምጃ','Action') }}</th><th>{{ t('ዒላማ','Target') }}</th><th>{{ t('ዝርዝር','Details') }}</th><th>{{ t('ቀን/ሰዓት','When') }}</th></tr></thead>
+      <tbody>
+        {% for e in entries %}
+        <tr>
+          <td class="row-person"><span class="avatar">{{ (e.actor.name or e.actor.email)[0]|upper if e.actor else '?' }}</span><span class="row-person__name">{{ e.actor.name or e.actor.email if e.actor else t('ስርዓት','System') }}</span></td>
+          <td><code style="font-size:11.5px;background:var(--canvas);padding:2px 7px;border-radius:5px">{{ e.action }}</code></td>
+          <td>{{ e.target_type }}{% if e.target_id %} #{{ e.target_id }}{% endif %}</td>
+          <td style="color:var(--ink-muted);font-size:12.5px">{{ e.details or '—' }}</td>
+          <td style="white-space:nowrap">{{ e.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2"><div class="empty-state2__icon">{{ ic.icon('file',24) }}</div><p>{{ t('ገና ምንም እንቅስቃሴ አልተመዘገበም።','No activity recorded yet.') }}</p></div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('የስራ ማስታወቂያዎች','Jobs') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('የስራ ማስታወቂያዎች','Job Postings') }}{% endblock %}
+{% block page_subtitle %}{{ jobs|length }} {{ t('ንቁ ማስታወቂያዎች','active postings') }}{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('አዲስ ማስታወቂያ ጨምር','Add a New Job Posting') }}</h3></div>
+  <form method="post" class="panel__body">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div class="field" style="margin-bottom:0"><label>{{ t('አሰሪ','Employer') }}</label>
+        <select name="employer_id">{% for e in employers %}<option value="{{ e.id }}">{{ e.company_name }} ({{ e.country }})</option>{% endfor %}</select>
+      </div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ሀገር','Country') }}</label><input type="text" name="country"></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ርዕስ (አማርኛ)','Title (Amharic)') }}</label><input type="text" name="title_am"></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ርዕስ (እንግሊዝኛ)','Title (English)') }}</label><input type="text" name="title_en"></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ምድብ','Category') }}</label><input type="text" name="category"></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ቦታዎች','Positions') }}</label><input type="number" name="positions_available" value="1" min="1"></div>
+    </div>
+    <button type="submit" class="btn btn--primary">{{ ic.icon('briefcase',16) }} {{ t('አክል','Add Job') }}</button>
+  </form>
+</div>
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('ሁሉም ማስታወቂያዎች','All Postings') }}</h3></div>
+  {% if jobs %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('ርዕስ','Title') }}</th><th>{{ t('አሰሪ','Employer') }}</th><th>{{ t('ሀገር','Country') }}</th><th>{{ t('ቦታዎች','Positions') }}</th></tr></thead>
+      <tbody>
+        {% for j in jobs %}
+        <tr><td>{{ j.title(current_lang) }}</td><td>{{ j.employer.company_name }}</td><td>{{ j.country }}</td><td>{{ j.positions_available }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2"><div class="empty-state2__icon">{{ ic.icon('briefcase',24) }}</div><p>{{ t('ምንም የስራ ማስታወቂያ የለም። ከላይ ያክሉ።','No job postings yet — add one above.') }}</p></div>
+  {% endif %}
+</div>
+{% endblock %}

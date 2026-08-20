@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}{{ t('ተመዝገብ','Register') }} — {{ company_name }}{% endblock %}
+{% block content %}
+<div class="auth-shell">
+  <div class="auth-card" style="max-width:460px">
+    <h1>{{ t('ምዝገባ','Create your account') }}</h1>
+    <p class="sub">{{ t('ከምዝገባ እስከ መነሳት ድረስ ጉዞዎን ይጀምሩ','Start your journey from registration to departure') }}</p>
+
+    <div class="step-indicator">
+      <div class="step-indicator__item active" data-step-label="1">
+        <span class="step-indicator__num">1</span><span class="step-indicator__text">{{ t('አካውንት','Account') }}</span>
+      </div>
+      <div class="step-indicator__line"></div>
+      <div class="step-indicator__item" data-step-label="2">
+        <span class="step-indicator__num">2</span><span class="step-indicator__text">{{ t('የግል መረጃ','Personal') }}</span>
+      </div>
+    </div>
+
+    <form method="post" novalidate id="registerForm">
+      {{ form.hidden_tag() }}
+
+      <div class="reg-step" data-step="1">
+        <div class="field">
+          {{ form.username.label }}
+          {{ form.username(placeholder=t('ለምሳሌ: tofik','e.g. tofik')) }}
+          {% for err in form.username.errors %}<div class="field-error">{{ err }}</div>{% endfor %}
+        </div>
+        <div class="field">
+          {{ form.email.label }}
+          {{ form.email(placeholder="you@example.com") }}
+          {% for err in form.email.errors %}<div class="field-error">{{ err }}</div>{% endfor %}
+        </div>
+        <div class="field">
+          {{ form.password.label }}
+          {{ form.password(placeholder="••••••••") }}
+          {% for err in form.password.errors %}<div class="field-error">{{ err }}</div>{% endfor %}
+        </div>
+        <div class="field">
+          {{ form.confirm_password.label }}
+          {{ form.confirm_password(placeholder="••••••••") }}
+          {% for err in form.confirm_password.errors %}<div class="field-error">{{ err }}</div>{% endfor %}
+        </div>
+        <button type="button" class="btn btn--primary btn--block" id="toStep2">{{ t('ቀጣይ →','Next →') }}</button>
+      </div>
+
+      <div class="reg-step" data-step="2" style="display:none">
+        <div class="field">
+          {{ form.full_name.label }}
+          {{ form.full_name(placeholder=t('ሙሉ ስም','Your full name')) }}
+          {% for err in form.full_name.errors %}<div class="field-error">{{ err }}</div>{% endfor %}
+        </div>
+        <div class="field">
+          {{ form.phone.label }}
+          {{ form.phone(placeholder="+2519XXXXXXXX") }}
+          {% for err in form.phone.errors %}<div class="field-error">{{ err }}</div>{% endfor %}
+        </div>
+        <div style="display:flex;gap:10px">
+          <button type="button" class="btn btn--ghost" id="backStep1">{{ t('ተመለስ','Back') }}</button>
+          {{ form.submit(class="btn btn--primary btn--block") }}
+        </div>
+      </div>
+    </form>
+    <p class="form-foot">{{ t('አካውንት አለዎት?','Already have an account?') }} <a href="{{ url_for('auth.login') }}">{{ t('ግቡ','Log in') }}</a></p>
+  </div>
+</div>
+
+<style>
+.step-indicator{display:flex;align-items:center;margin-bottom:26px}
+.step-indicator__item{display:flex;align-items:center;gap:8px;opacity:.45}
+.step-indicator__item.active,.step-indicator__item.done{opacity:1}
+.step-indicator__num{width:26px;height:26px;border-radius:50%;background:var(--line);color:var(--ink-muted);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.step-indicator__item.active .step-indicator__num{background:var(--pro-blue);color:#fff}
+.step-indicator__item.done .step-indicator__num{background:var(--success);color:#fff}
+.step-indicator__text{font-size:12.5px;font-weight:700;white-space:nowrap}
+.step-indicator__line{flex:1;height:2px;background:var(--line);margin:0 10px}
+</style>
+
+<script>
+(function(){
+  const step1 = document.querySelector('.reg-step[data-step="1"]');
+  const step2 = document.querySelector('.reg-step[data-step="2"]');
+  const ind1 = document.querySelector('.step-indicator__item[data-step-label="1"]');
+  const ind2 = document.querySelector('.step-indicator__item[data-step-label="2"]');
+
+  document.getElementById('toStep2').addEventListener('click', () => {
+    const inputs = step1.querySelectorAll('input');
+    let valid = true;
+    inputs.forEach(inp => { if (!inp.checkValidity()) { inp.reportValidity(); valid = false; } });
+    if (!valid) return;
+    step1.style.display = 'none';
+    step2.style.display = 'block';
+    ind1.classList.remove('active'); ind1.classList.add('done');
+    ind2.classList.add('active');
+  });
+
+  document.getElementById('backStep1').addEventListener('click', () => {
+    step2.style.display = 'none';
+    step1.style.display = 'block';
+    ind2.classList.remove('active');
+    ind1.classList.remove('done'); ind1.classList.add('active');
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('ግምገማዎች','Reviews') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('የድህረ-ስምሪት ግምገማዎች','Post-Deployment Reviews') }}{% endblock %}
+{% block page_subtitle %}{{ t('የቀጣሪ/የኤጀንሲ ግብረ መልስ ይመዝግቡ','Log employer or agency feedback after placement') }}{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('ግምገማ ጨምር','Add a Review') }}</h3></div>
+  <form method="post" class="panel__body">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px">
+      <div class="field" style="grid-column:span 2;margin-bottom:0"><label>{{ t('አመልካች (የተሰማራ)','Applicant (deployed)') }}</label>
+        <select name="applicant_id" required>
+          <option value="">—</option>
+          {% for a in applicants %}<option value="{{ a.id }}">{{ a.full_name }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ደረጃ','Rating') }}</label>
+        <select name="rating" required>{% for n in [5,4,3,2,1] %}<option value="{{ n }}">{{ '★' * n }}{{ '☆' * (5-n) }}</option>{% endfor %}</select>
+      </div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ገምጋሚ','Reviewer') }}</label>
+        <select name="reviewer_type"><option value="employer">Employer</option><option value="agency">Agency</option></select>
+      </div>
+      <div class="field" style="grid-column:1/-1;margin-bottom:0"><label>{{ t('አስተያየት (አማራጭ)','Comment (optional)') }}</label><input type="text" name="comment"></div>
+    </div>
+    <button type="submit" class="btn btn--primary">{{ ic.icon('check',16) }} {{ t('ግምገማ አስቀምጥ','Save Review') }}</button>
+  </form>
+</div>
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('ሁሉም ግምገማዎች','All Reviews') }}</h3><p>{{ reviews|length }} {{ t('ጠቅላላ','total') }}</p></div>
+  {% if reviews %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('አመልካች','Applicant') }}</th><th>{{ t('ደረጃ','Rating') }}</th><th>{{ t('ገምጋሚ','Reviewer') }}</th><th>{{ t('አስተያየት','Comment') }}</th><th>{{ t('ቀን','Date') }}</th></tr></thead>
+      <tbody>
+        {% for r in reviews %}
+        <tr>
+          <td>{{ r.applicant.full_name }}</td>
+          <td style="color:var(--gold, #C88A1E);font-weight:700">{{ '★' * r.rating }}{{ '☆' * (5 - r.rating) }}</td>
+          <td style="text-transform:capitalize">{{ r.reviewer_type }}</td>
+          <td>{{ r.comment or '—' }}</td>
+          <td>{{ r.created_at.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2"><div class="empty-state2__icon">{{ ic.icon('check-sq',24) }}</div><p>{{ t('እስካሁን ምንም ግምገማ የለም።','No reviews yet.') }}</p></div>
+  {% endif %}
+</div>
+{% endblock %}

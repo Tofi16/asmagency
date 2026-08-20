@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ t('አግኙን','Contact') }} — {{ company_name }}{% endblock %}
+{% block content %}
+<section>
+  <div class="wrap">
+    <div class="section-head section-head--center">
+      <span class="kicker">{{ t('አግኙን','Get in Touch') }}</span>
+      <h1 style="font-size:30px">{{ t('ጥያቄ አለዎት? እናግዝዎታለን','Have a Question? We\'re Here to Help') }}</h1>
+    </div>
+    <div class="grid-2">
+      <div class="card"><h3>📞 {{ t('ስልክ','Phone') }}</h3><p style="margin-top:8px"><a href="tel:{{ company_phone }}">{{ company_phone }}</a></p></div>
+      <div class="card"><h3>✉️ {{ t('ኢሜይል','Email') }}</h3><p style="margin-top:8px"><a href="mailto:{{ company_email }}">{{ company_email }}</a></p></div>
+      <div class="card"><h3>📍 {{ t('አድራሻ','Address') }}</h3><p style="margin-top:8px">{{ t(company_address_am, company_address_en) }}</p></div>
+      <div class="card"><h3>🕐 {{ t('የስራ ሰዓት','Working Hours') }}</h3><p style="margin-top:8px">{{ t('ሰኞ–ቅዳሜ, 8:30–17:30','Mon–Sat, 8:30 AM–5:30 PM') }}</p></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

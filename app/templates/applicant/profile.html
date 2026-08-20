@@ -1,0 +1,25 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('መገለጫ','Profile') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "applicant/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('መገለጫዬ','My Profile') }}{% endblock %}
+{% block page_subtitle %}{{ t('የግል መረጃዎን ያዘምኑ','Keep your details up to date') }}{% endblock %}
+
+{% block content %}
+<div class="panel" style="max-width:680px">
+  <div class="panel__head"><h3>{{ t('የግል መረጃ','Personal Information') }}</h3></div>
+  <form method="post" class="panel__body">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="field" style="grid-column:1/-1"><label>{{ t('ሙሉ ስም','Full name') }}</label><input type="text" name="full_name" value="{{ applicant.full_name }}"></div>
+      <div class="field"><label>{{ t('ክልል','Region') }}</label><input type="text" name="region" value="{{ applicant.region or '' }}"></div>
+      <div class="field"><label>{{ t('ከተማ','City') }}</label><input type="text" name="city" value="{{ applicant.city or '' }}"></div>
+      <div class="field" style="grid-column:1/-1"><label>{{ t('የትምህርት ደረጃ','Education level') }}</label><input type="text" name="education_level" value="{{ applicant.education_level or '' }}"></div>
+      <div class="field" style="grid-column:1/-1"><label>{{ t('የስራ ልምድ','Work experience') }}</label><textarea name="work_experience" rows="4">{{ applicant.work_experience or '' }}</textarea></div>
+      <div class="field"><label>{{ t('የሚፈለግ ሀገር','Preferred country') }}</label><input type="text" name="preferred_country" value="{{ applicant.preferred_country or '' }}"></div>
+      <div class="field"><label>{{ t('የሚፈለግ የስራ ዘርፍ','Preferred category') }}</label><input type="text" name="preferred_job_category" value="{{ applicant.preferred_job_category or '' }}"></div>
+    </div>
+    <button type="submit" class="btn btn--primary">{{ ic.icon('check',16) }} {{ t('አስቀምጥ','Save changes') }}</button>
+  </form>
+</div>
+{% endblock %}

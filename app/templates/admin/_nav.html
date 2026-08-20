@@ -1,0 +1,45 @@
+{% import "_icons.html" as ic %}
+<div class="nav-section">{{ t('ዋና','Main') }}</div>
+<a href="{{ url_for('admin.dashboard') }}" class="nav-item {{ 'active' if request.endpoint=='admin.dashboard' }}">{{ ic.icon('chart') }}<span>{{ t('ዳሽቦርድ','Dashboard') }}</span></a>
+
+<div class="nav-section">{{ t('አስተዳደር','Management') }}</div>
+{% if can('applicants') %}
+<a href="{{ url_for('admin.applicants') }}" class="nav-item {{ 'active' if request.endpoint=='admin.applicants' }}">{{ ic.icon('users') }}<span>{{ t('አመልካቾች','Applicants') }}</span></a>
+{% endif %}
+{% if can('documents') %}
+<a href="{{ url_for('admin.documents') }}" class="nav-item {{ 'active' if request.endpoint=='admin.documents' }}">{{ ic.icon('check-sq') }}<span>{{ t('ሰነድ ማረጋገጫ','Verify Documents') }}</span>{% if pending_docs_count %}<span class="nav-badge">{{ pending_docs_count }}</span>{% endif %}</a>
+{% endif %}
+{% if can('cv') %}
+<a href="{{ url_for('admin.cv_list') }}" class="nav-item {{ 'active' if request.endpoint and request.endpoint.startswith('admin.cv') }}">{{ ic.icon('file') }}<span>{{ t('CV ገንቢ','CV Builder') }}</span></a>
+{% endif %}
+{% if can('jobs') %}
+<a href="{{ url_for('admin.jobs') }}" class="nav-item {{ 'active' if request.endpoint=='admin.jobs' }}">{{ ic.icon('briefcase') }}<span>{{ t('የስራ ማስታወቂያዎች','Jobs') }}</span></a>
+{% endif %}
+{% if can('interviews') %}
+<a href="{{ url_for('admin.interviews') }}" class="nav-item {{ 'active' if request.endpoint=='admin.interviews' }}">{{ ic.icon('clock') }}<span>{{ t('ቃለ መጠይቆች','Interviews') }}</span></a>
+{% endif %}
+{% if can('reviews') %}
+<a href="{{ url_for('admin.reviews') }}" class="nav-item {{ 'active' if request.endpoint=='admin.reviews' }}">{{ ic.icon('star') }}<span>{{ t('ግምገማዎች','Reviews') }}</span></a>
+{% endif %}
+
+{% if can('payments') %}
+<div class="nav-section">{{ t('ገንዘብ','Finance') }}</div>
+<a href="{{ url_for('admin.payments') }}" class="nav-item {{ 'active' if request.endpoint=='admin.payments' }}">{{ ic.icon('card') }}<span>{{ t('ክፍያዎች','Payments') }}</span></a>
+<a href="{{ url_for('admin.finance') }}" class="nav-item {{ 'active' if request.endpoint=='admin.finance' }}">{{ ic.icon('trend-up') }}<span>{{ t('የገንዘብ ዳሽቦርድ','Finance') }}</span></a>
+{% endif %}
+
+{% if can('notifications') or can('partners') %}
+<div class="nav-section">{{ t('ግንኙነት','Outreach') }}</div>
+{% if can('notifications') %}
+<a href="{{ url_for('admin.notifications') }}" class="nav-item {{ 'active' if request.endpoint=='admin.notifications' }}">{{ ic.icon('bell') }}<span>{{ t('ማሳወቂያዎች','Notifications') }}</span></a>
+{% endif %}
+{% if can('partners') %}
+<a href="{{ url_for('admin.partners') }}" class="nav-item {{ 'active' if request.endpoint=='admin.partners' }}">{{ ic.icon('shield') }}<span>{{ t('አጋር ኤጀንሲዎች','Partner Agencies') }}</span></a>
+{% endif %}
+{% endif %}
+
+{% if current_user.is_super_admin %}
+<div class="nav-section">{{ t('ስርዓት','System') }}</div>
+<a href="{{ url_for('admin.team') }}" class="nav-item {{ 'active' if request.endpoint=='admin.team' }}">{{ ic.icon('user') }}<span>{{ t('የቡድን አባላት','Team / Admin Access') }}</span></a>
+<a href="{{ url_for('admin.audit') }}" class="nav-item {{ 'active' if request.endpoint=='admin.audit' }}">{{ ic.icon('activity') }}<span>{{ t('የእንቅስቃሴ ማስታወሻ','Audit Log') }}</span></a>
+{% endif %}

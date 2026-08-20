@@ -1,0 +1,68 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('የገንዘብ ዳሽቦርድ','Finance') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('የገንዘብ ዳሽቦርድ','Finance Dashboard') }}{% endblock %}
+{% block page_subtitle %}{{ t('ገቢ፣ ያልተከፈለ ቀሪ እና በአይነት ስርጭት','Revenue, outstanding balances, and breakdown by type') }}{% endblock %}
+{% block extra_head %}<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>{% endblock %}
+
+{% block content %}
+<div class="stat-cards2">
+  <div class="stat-card2"><div class="stat-card2__top"><div class="stat-card2__icon green">{{ ic.icon('card',18) }}</div></div><div class="stat-card2__num">{{ '{:,.0f}'.format(total_completed) }}</div><div class="stat-card2__label">{{ t('የተሰበሰበ ገቢ (ETB)','Collected Revenue (ETB)') }}</div></div>
+  <div class="stat-card2"><div class="stat-card2__top"><div class="stat-card2__icon amber">{{ ic.icon('clock',18) }}</div></div><div class="stat-card2__num">{{ '{:,.0f}'.format(total_pending) }}</div><div class="stat-card2__label">{{ t('ያልተከፈለ (ETB)','Outstanding (ETB)') }}</div></div>
+  <div class="stat-card2"><div class="stat-card2__top"><div class="stat-card2__icon blue">{{ ic.icon('users',18) }}</div></div><div class="stat-card2__num">{{ outstanding|length }}</div><div class="stat-card2__label">{{ t('ያልከፈሉ አመልካቾች','Applicants with balance') }}</div></div>
+</div>
+
+<div style="display:grid;grid-template-columns:1.3fr 1fr;gap:22px;align-items:start;margin-bottom:24px">
+  <div class="panel" style="margin-bottom:0">
+    <div class="panel__head"><h3>{{ t('ወርሃዊ የገቢ አዝማሚያ','Monthly Revenue Trend') }}</h3></div>
+    <div class="panel__body"><canvas id="revChart" height="110"></canvas></div>
+  </div>
+  <div class="panel" style="margin-bottom:0">
+    <div class="panel__head"><h3>{{ t('በአይነት ገቢ','Revenue by Type') }}</h3></div>
+    <div class="panel__body">
+      {% if by_type %}
+      {% for ptype, amt in by_type.items() %}
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px">
+        <span style="text-transform:capitalize;font-weight:600">{{ ptype }}</span>
+        <span style="font-weight:800;font-family:'Poppins'">{{ '{:,.0f}'.format(amt) }} ETB</span>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p style="color:var(--ink-muted);font-size:13.5px">{{ t('ገና ምንም ክፍያ የለም።','No payments yet.') }}</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('ያልተከፈለ ቀሪ በአመልካች','Outstanding Balance by Applicant') }}</h3></div>
+  {% if outstanding %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('አመልካች','Applicant') }}</th><th>{{ t('ያልተከፈለ መጠን','Outstanding Amount') }}</th></tr></thead>
+      <tbody>
+        {% for applicant, amt in outstanding %}
+        <tr><td class="row-person"><span class="avatar">{{ applicant.full_name[0]|upper }}</span><span class="row-person__name">{{ applicant.full_name }}</span></td><td style="font-weight:700">{{ '{:,.0f}'.format(amt) }} ETB</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2"><div class="empty-state2__icon">{{ ic.icon('card',24) }}</div><p>{{ t('ምንም ያልተከፈለ ክፍያ የለም።','No outstanding balances.') }}</p></div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+new Chart(document.getElementById('revChart'), {
+  type: 'bar',
+  data: {
+    labels: {{ month_labels | tojson }},
+    datasets: [{ label: 'Revenue (ETB)', data: {{ month_totals | tojson }}, backgroundColor: '#25AAE2', borderRadius: 6, maxBarThickness: 42 }]
+  },
+  options: { responsive:true, plugins:{legend:{display:false}}, scales:{ y:{beginAtZero:true, grid:{color:'#E2E6ED'}}, x:{grid:{display:false}} } }
+});
+</script>
+{% endblock %}

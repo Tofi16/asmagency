@@ -1,0 +1,42 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('አመልካቾች','Applicants') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('አመልካቾች','Applicants') }}{% endblock %}
+{% block page_subtitle %}{{ applicants|length }} {{ t('ጠቅላላ','total') }}{% endblock %}
+
+{% block content %}
+<div class="panel">
+  {% if applicants %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('አመልካች','Applicant') }}</th><th>{{ t('ደረጃ','Stage') }}</th><th>{{ t('ደረጃ አሰጣጥ','Rating') }}</th><th>{{ t('ተመዘገበበት','Registered') }}</th><th>{{ t('ቀጣይ ደረጃ','Advance to') }}</th></tr></thead>
+      <tbody>
+        {% for a in applicants %}
+        <tr>
+          <td class="row-person">
+            <span class="avatar">{{ a.full_name[0] | upper }}</span>
+            <div class="row-person__meta"><div class="row-person__name">{{ a.full_name }}</div><div class="row-person__sub">{{ a.user.email }}</div></div>
+          </td>
+          <td><span class="pill pill-{{ a.pipeline_status }}"><span class="dot"></span>{{ a.pipeline_status }}</span></td>
+          <td>{% if review_avgs.get(a.id) %}<span style="color:#C88A1E;font-weight:700">★ {{ '%.1f'|format(review_avgs[a.id]) }}</span>{% else %}<span style="color:var(--ink-muted);font-size:12px">—</span>{% endif %}</td>
+          <td>{{ a.created_at.strftime('%Y-%m-%d') }}</td>
+          <td>
+            <form method="post" action="{{ url_for('admin.advance_pipeline', applicant_id=a.id) }}" style="display:flex;gap:8px">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <select name="status" style="padding:7px 10px;border:1.5px solid var(--line);border-radius:8px;font-size:13px">
+                {% for s in stages %}<option value="{{ s }}" {{ 'selected' if s == a.pipeline_status }}>{{ s }}</option>{% endfor %}
+              </select>
+              <button type="submit" class="btn btn--sm btn--primary">{{ t('አዘምን','Update') }}</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2"><div class="empty-state2__icon">{{ ic.icon('users',24) }}</div><p>{{ t('እስካሁን ምንም አመልካች የለም።','No applicants yet.') }}</p></div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('ሰነድ ማረጋገጫ','Verify Documents') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('በመጠባበቅ ላይ ያሉ ሰነዶች','Pending Documents') }}{% endblock %}
+{% block page_subtitle %}{{ documents|length }} {{ t('ማረጋገጫ ይጠብቃሉ','awaiting review') }}{% endblock %}
+
+{% block content %}
+<div class="panel">
+  {% if documents %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('አመልካች','Applicant') }}</th><th>{{ t('አይነት','Type') }}</th><th>{{ t('ፋይል','File') }}</th><th>{{ t('የተሰቀለበት','Uploaded') }}</th><th>{{ t('እርምጃ','Action') }}</th></tr></thead>
+      <tbody>
+        {% for d in documents %}
+        <tr>
+          <td class="row-person"><span class="avatar">{{ d.applicant.full_name[0] | upper }}</span><span class="row-person__name">{{ d.applicant.full_name }}</span></td>
+          <td>{{ t(doc_labels_am.get(d.doc_type, d.doc_type), doc_labels_en.get(d.doc_type, d.doc_type)) }}</td>
+          <td>{{ d.original_filename }}</td>
+          <td>{{ d.uploaded_at.strftime('%Y-%m-%d') }}</td>
+          <td class="tbl-actions">
+            <form method="post" action="{{ url_for('admin.verify_document', doc_id=d.id) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="action" value="approve"><button class="btn btn--sm btn--primary">{{ ic.icon('check',14) }} {{ t('አጽድቅ','Approve') }}</button></form>
+            <form method="post" action="{{ url_for('admin.verify_document', doc_id=d.id) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="action" value="reject"><button class="btn btn--sm btn--danger">{{ ic.icon('x',14) }} {{ t('ውድቅ','Reject') }}</button></form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2"><div class="empty-state2__icon">{{ ic.icon('check-sq',24) }}</div><p>{{ t('ምንም በመጠባበቅ ላይ ያለ ሰነድ የለም።','No documents pending review.') }}</p></div>
+  {% endif %}
+</div>
+{% endblock %}

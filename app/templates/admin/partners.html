@@ -1,0 +1,47 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('አጋር ኤጀንሲዎች','Partner Agencies') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('አጋር ኤጀንሲዎች','Partner Agencies') }}{% endblock %}
+{% block page_subtitle %}{{ t('ከውጭ ሀገር አጋር ኤጀንሲዎች ጋር ግንኙነት ያስተዳድሩ','Manage overseas partner agency relationships') }}{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('አዲስ አጋር ጨምር','Add a New Partner') }}</h3></div>
+  <form method="post" class="panel__body">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px">
+      <div class="field" style="margin-bottom:0"><label>{{ t('የኤጀንሲ ስም','Agency Name') }}</label><input type="text" name="name" required></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ሀገር','Country') }}</label><input type="text" name="country" required></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ተጠሪ ሰው','Contact Person') }}</label><input type="text" name="contact_person"></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ኢሜይል','Email') }}</label><input type="email" name="contact_email"></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ስልክ','Phone') }}</label><input type="text" name="contact_phone"></div>
+    </div>
+    <button type="submit" class="btn btn--primary">{{ ic.icon('shield',16) }} {{ t('አጋር ጨምር','Add Partner') }}</button>
+  </form>
+</div>
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('ሁሉም አጋሮች','All Partners') }}</h3></div>
+  {% if partners %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('ስም','Name') }}</th><th>{{ t('ሀገር','Country') }}</th><th>{{ t('ተጠሪ','Contact') }}</th><th>{{ t('ኢሜይል','Email') }}</th><th>{{ t('ስልክ','Phone') }}</th></tr></thead>
+      <tbody>
+        {% for p in partners %}
+        <tr>
+          <td style="font-weight:700">{{ p.name }}</td>
+          <td>{{ p.country }}</td>
+          <td>{{ p.contact_person or '—' }}</td>
+          <td>{{ p.contact_email or '—' }}</td>
+          <td>{{ p.contact_phone or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2"><div class="empty-state2__icon">{{ ic.icon('shield',24) }}</div><p>{{ t('ገና ምንም አጋር አልተጨመረም። ከላይ ያክሉ።','No partners added yet — add one above.') }}</p></div>
+  {% endif %}
+</div>
+{% endblock %}

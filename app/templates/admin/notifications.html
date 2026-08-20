@@ -1,0 +1,56 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('ማሳወቂያዎች','Notifications') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('የጅምላ ማሳወቂያ','Bulk Notifications') }}{% endblock %}
+{% block page_subtitle %}{{ t('ለብዙ አመልካቾች በአንድ ጊዜ መልእክት','Message many applicants at once') }}{% endblock %}
+
+{% block content %}
+<div class="partner-note-style" style="background:var(--pro-blue-light);border:1px dashed var(--pro-blue);border-radius:10px;padding:12px 16px;font-size:13px;margin-bottom:20px;color:var(--authority)">
+  ℹ️ {{ t('ይህ ለአሁኑ ወደ ወረፋ ብቻ ያስገባል — ትክክለኛ SMS ለመላክ የSMS አቅራቢ (ለምሳሌ Africa\'s Talking) ማዋቀር ያስፈልጋል።','This currently only queues messages — actually sending SMS requires connecting a provider (e.g. Africa\'s Talking). See README.') }}
+</div>
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('መልእክት ይላኩ','Compose Message') }}</h3></div>
+  <form method="post" class="panel__body">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div class="field" style="margin-bottom:0"><label>{{ t('ተቀባዮች','Audience') }}</label>
+        <select name="audience">
+          <option value="all">{{ t('ሁሉም አመልካቾች','All applicants') }} ({{ stage_counts.values() | sum }})</option>
+          {% for s in stages %}<option value="stage:{{ s }}">{{ s }} ({{ stage_counts.get(s, 0) }})</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ቻናል','Channel') }}</label>
+        <select name="channel"><option value="sms">SMS</option><option value="email">Email</option></select>
+      </div>
+    </div>
+    <div class="field"><label>{{ t('መልእክት','Message') }}</label><textarea name="message" rows="4" required placeholder="{{ t('ለምሳሌ: ውድ አመልካች፣ የቪዛ ሂደትዎ ተጀምሯል...','e.g. Dear applicant, your visa process has started...') }}"></textarea></div>
+    <button type="submit" class="btn btn--primary">{{ ic.icon('bell',16) }} {{ t('ወደ ወረፋ ላክ','Queue Message') }}</button>
+  </form>
+</div>
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('የቅርብ ጊዜ ወረፋ','Recent Queue') }}</h3></div>
+  {% if sent_log %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('ቻናል','Channel') }}</th><th>{{ t('መልእክት','Message') }}</th><th>{{ t('ተቀባዮች','Recipients') }}</th><th>{{ t('ሁኔታ','Status') }}</th><th>{{ t('ቀን','Date') }}</th></tr></thead>
+      <tbody>
+        {% for n in sent_log %}
+        <tr>
+          <td style="text-transform:uppercase;font-weight:700;font-size:11px">{{ n.channel }}</td>
+          <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ n.message }}</td>
+          <td>{{ n.recipient_count }}</td>
+          <td><span class="pill pill-pending"><span class="dot"></span>{{ n.status }}</span></td>
+          <td>{{ n.created_at.strftime('%Y-%m-%d') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2"><div class="empty-state2__icon">{{ ic.icon('bell',24) }}</div><p>{{ t('ገና ምንም መልእክት አልተላከም።','No messages queued yet.') }}</p></div>
+  {% endif %}
+</div>
+{% endblock %}

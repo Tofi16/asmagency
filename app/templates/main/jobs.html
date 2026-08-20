@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ t('ስራዎች','Jobs') }} — {{ company_name }}{% endblock %}
+{% block content %}
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">{{ t('ክፍት የስራ ቦታዎች','Open Positions') }}</span>
+      <h1 style="font-size:30px">{{ t('የስራ እድሎችን ይፈልጉ','Search Job Opportunities') }}</h1>
+    </div>
+
+    <form method="get" style="display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap">
+      <input type="text" name="q" value="{{ q }}" placeholder="{{ t('ስራ ይፈልጉ...','Search jobs...') }}" style="flex:1;min-width:200px;padding:11px 14px;border:1.5px solid var(--line);border-radius:9px">
+      <select name="country" style="padding:11px 14px;border:1.5px solid var(--line);border-radius:9px">
+        <option value="">{{ t('ሁሉም ሀገራት','All Countries') }}</option>
+        {% for c in countries %}
+          <option value="{{ c }}" {{ 'selected' if c == country }}>{{ c }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="btn btn--primary">{{ t('ፈልግ','Search') }}</button>
+    </form>
+
+    {% if jobs %}
+      <div class="grid-2">
+        {% for job in jobs %}
+        <div class="card">
+          <h3 style="margin-bottom:8px">{{ job.title(current_lang) }}</h3>
+          <p style="color:var(--ink-muted);font-size:14px;margin-bottom:10px">{{ job.employer.company_name }} · {{ job.country }}</p>
+          <p style="font-size:14px;color:var(--ink-muted);margin-bottom:14px">{{ job.description(current_lang) or '' }}</p>
+          <span class="badge badge-info">{{ job.positions_available }} {{ t('ቦታዎች','positions') }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <p>{{ t('በአሁኑ ጊዜ ምንም ክፍት የስራ ቦታ አልተገኘም። እባክዎ ቆይተው ይሞክሩ።','No open positions match right now — check back soon.') }}</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

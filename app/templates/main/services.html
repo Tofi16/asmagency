@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}{{ t('አገልግሎቶች','Services') }} — {{ company_name }}{% endblock %}
+{% block content %}
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">{{ t('አገልግሎቶች','Services') }}</span>
+      <h1 style="font-size:30px">{{ t('ሙሉ የድጋፍ ጥቅል','Our Full Service Package') }}</h1>
+    </div>
+    <div class="grid-3">
+      <div class="card"><div class="card__icon">1</div><h3>{{ t('ምዝገባ እና ማረጋገጫ','Registration & Verification') }}</h3><p>{{ t('ፓስፖርት፣ ትምህርት እና ልምድ ማስረጃ ማረጋገጫ።','Passport, education, and experience verification.') }}</p></div>
+      <div class="card"><div class="card__icon">2</div><h3>{{ t('የስራ ማጣመድ','Job Matching') }}</h3><p>{{ t('ከተረጋገጡ አሰሪዎች ጋር ማገናኘት።','Connecting you with verified employers.') }}</p></div>
+      <div class="card"><div class="card__icon">3</div><h3>{{ t('የቪዛ ሂደት','Visa Processing') }}</h3><p>{{ t('ሙሉ የቪዛ ማመልከቻ ድጋፍ።','Full visa application support.') }}</p></div>
+      <div class="card"><div class="card__icon">4</div><h3>{{ t('የክፍያ ክትትል','Payment Tracking') }}</h3><p>{{ t('ቴሌብር፣ ሲቢኢ ብር፣ የባንክ ዝውውር።','Telebirr, CBE Birr, bank transfer.') }}</p></div>
+      <div class="card"><div class="card__icon">5</div><h3>{{ t('የጉዞ ዝግጅት','Pre-Departure Prep') }}</h3><p>{{ t('በረራ፣ ስልጠና፣ ሰነዶች።','Flights, orientation, documents.') }}</p></div>
+      <div class="card"><div class="card__icon">6</div><h3>{{ t('24/7 ድጋፍ','24/7 Support') }}</h3><p>{{ t('ከተሰማሩ በኋላም ድጋፍ እናደርጋለን።','Support continues after deployment.') }}</p></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

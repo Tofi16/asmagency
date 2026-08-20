@@ -1,0 +1,78 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('የቡድን አባላት','Team / Admin Access') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('የቡድን አባላት','Team / Admin Access') }}{% endblock %}
+{% block page_subtitle %}{{ t('የአድሚን ፓነል መዳረሻ እና ፍቃዶች','Admin access and per-person permissions') }}{% endblock %}
+
+{% block content %}
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('አዲስ አድሚን ጨምር','Add a New Admin') }}</h3><p>{{ t('ተመሳሳይ ኢሜይል/ስልክ ካለ ድግግሞሽ አይፈጠርም','Duplicate email/phone is automatically blocked') }}</p></div>
+  <form method="post" class="panel__body" id="addAdminForm">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:16px">
+      <div class="field" style="margin-bottom:0"><label>{{ t('ሙሉ ስም','Full Name') }}</label><input type="text" name="name" placeholder="e.g. Tofik" required></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('የተጠቃሚ ስም','Username') }}</label><input type="text" name="username" placeholder="e.g. tofik" pattern="[a-zA-Z0-9_.]+" required></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ኢሜይል','Email') }}</label><input type="email" name="email" required></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('ስልክ (አማራጭ)','Phone (optional)') }}</label><input type="text" name="phone"></div>
+      <div class="field" style="margin-bottom:0"><label>{{ t('የይለፍ ቃል','Password') }}</label><input type="password" name="password" minlength="8" required></div>
+    </div>
+
+    <div class="field checkbox" style="margin-bottom:14px">
+      <input type="checkbox" name="is_super_admin" id="isSuperAdmin" onchange="document.getElementById('permsBlock').style.display = this.checked ? 'none' : 'grid'">
+      <label for="isSuperAdmin" style="margin:0">{{ t('ሙሉ አድሚን (Super Admin — ሁሉንም ማየት/ማድረግ ይችላል)','Super Admin (full access to everything)') }}</label>
+    </div>
+
+    <p class="subhead" style="margin-bottom:8px">{{ t('ወይም የተወሰነ ፍቃድ ብቻ ይስጡ:','Or grant limited permissions:') }}</p>
+    <div id="permsBlock" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
+      {% set scope_labels = {
+        'applicants': t('አመልካቾች','Applicants'), 'documents': t('ሰነድ ማረጋገጫ','Documents'),
+        'cv': t('CV ገንቢ','CV Builder'), 'jobs': t('የስራ ማስታወቂያ','Jobs'),
+        'payments': t('ክፍያ/ገንዘብ','Payments/Finance'), 'partners': t('አጋር ኤጀንሲ','Partners'),
+        'interviews': t('ቃለ መጠይቅ','Interviews'), 'reviews': t('ግምገማ','Reviews'),
+        'notifications': t('ማሳወቂያ','Notifications'),
+      } %}
+      {% for scope in scopes %}
+      <div class="field checkbox" style="margin-bottom:0">
+        <input type="checkbox" name="permissions" value="{{ scope }}" id="perm_{{ scope }}">
+        <label for="perm_{{ scope }}" style="margin:0">{{ scope_labels[scope] }}</label>
+      </div>
+      {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn--primary">{{ ic.icon('user',16) }} {{ t('አድሚን ጨምር','Add Admin') }}</button>
+  </form>
+</div>
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('ወቅታዊ አድሚኖች','Current Admins') }}</h3><p>{{ admins|length }} {{ t('ጠቅላላ','total') }}</p></div>
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('ስም','Name') }}</th><th>{{ t('የተጠቃሚ ስም','Username') }}</th><th>{{ t('ኢሜይል','Email') }}</th><th>{{ t('ፍቃዶች','Permissions') }}</th><th>{{ t('የተቀላቀለበት','Joined') }}</th><th>{{ t('ሁኔታ','Status') }}</th></tr></thead>
+      <tbody>
+        {% for a in admins %}
+        <tr>
+          <td class="row-person">
+            <span class="avatar">{{ (a.name or a.email)[0] | upper }}</span>
+            <div class="row-person__meta"><div class="row-person__name">{{ a.name or '—' }}{% if a.id == current_user.id %} <span style="color:var(--ink-muted);font-weight:500">({{ t('እርስዎ','you') }})</span>{% endif %}</div><div class="row-person__sub">{{ a.email }}</div></div>
+          </td>
+          <td style="font-family:'Poppins';font-weight:700">{{ a.username or '—' }}</td>
+          <td>{{ a.email }}</td>
+          <td>
+            {% if a.is_super_admin %}
+              <span class="pill pill-deployed"><span class="dot"></span>{{ t('ሙሉ አድሚን','Super Admin') }}</span>
+            {% elif a.permissions %}
+              {% for p in a.permissions %}<span class="pill pill-info" style="margin:1px">{{ p }}</span>{% endfor %}
+            {% else %}
+              <span style="color:var(--ink-muted);font-size:12.5px">{{ t('ምንም ፍቃድ የለም','No permissions granted') }}</span>
+            {% endif %}
+          </td>
+          <td>{{ a.created_at.strftime('%Y-%m-%d') }}</td>
+          <td><span class="pill {{ 'pill-verified' if a.is_active_account else 'pill-rejected' }}"><span class="dot"></span>{{ t('ገባሪ','active') if a.is_active_account else t('ታግዷል','disabled') }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

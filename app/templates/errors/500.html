@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}500{% endblock %}
+{% block content %}
+<section><div class="wrap" style="text-align:center;padding:60px 20px">
+  <h1 style="font-size:64px;color:var(--trust-red)">500</h1>
+  <p style="color:var(--ink-muted);margin:12px 0 24px">{{ t('የስርዓት ስህተት ተከስቷል፣ እባክዎ ቆይተው ይሞክሩ።','Something went wrong on our end — please try again shortly.') }}</p>
+  <a href="{{ url_for('main.index') }}" class="btn btn--primary">{{ t('ወደ ቤት ገጽ','Back to Home') }}</a>
+</div></section>
+{% endblock %}

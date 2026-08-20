@@ -1,0 +1,176 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('ሰነዶች','Documents') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "applicant/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('ሰነዶቼ','My Documents') }}{% endblock %}
+{% block page_subtitle %}{{ t('ለCV እና ማረጋገጫ የሚያስፈልጉ ፎቶ/ሰነዶች','Photos and documents needed for your CV and verification') }}{% endblock %}
+
+{% block content %}
+{% set latest = {} %}
+{% for d in documents %}{% if d.doc_type not in latest %}{% set _ = latest.update({d.doc_type: d}) %}{% endif %}{% endfor %}
+
+<div class="grid-3" style="margin-bottom:24px">
+  {% for dtype, dicon in [('photo_portrait','user'), ('photo_full','user'), ('passport','file')] %}
+  {% set doc = latest.get(dtype) %}
+  <div class="panel" style="margin-bottom:0">
+    <div class="panel__body" style="text-align:center">
+      <div class="photo-picker" id="picker_{{ dtype }}" style="width:88px;height:88px;border-radius:16px;background:var(--pro-blue-light);color:var(--pro-blue);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;overflow:hidden">
+        {{ ic.icon(dicon, 26) }}
+      </div>
+      <p style="font-weight:800;font-size:14.5px;margin-bottom:4px">{{ t(doc_labels_am[dtype], doc_labels_en[dtype]) }}</p>
+      {% if doc %}
+        <span class="pill pill-{{ doc.status }}" style="margin-bottom:14px"><span class="dot"></span>{{ doc.status }}</span>
+        <p style="font-size:12px;color:var(--ink-muted);margin-bottom:14px">{{ doc.original_filename }}</p>
+      {% else %}
+        <p style="font-size:12.5px;color:var(--ink-muted);margin-bottom:14px">{{ t('ገና አልተሰቀለም','Not uploaded yet') }}</p>
+      {% endif %}
+
+      <form method="post" enctype="multipart/form-data" class="photo-picker-form" id="form_{{ dtype }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="doc_type" value="{{ dtype }}">
+        <label class="btn btn--ghost btn--sm" style="cursor:pointer;display:inline-flex">
+          {{ ic.icon('upload',14) }} {{ t('ተካ / ስቀል','Replace / Upload') }}
+          <input type="file" class="photo-picker-input" data-target="{{ dtype }}" accept=".pdf,.jpg,.jpeg,.png" style="display:none">
+        </label>
+        <div class="photo-picker-actions" id="actions_{{ dtype }}" style="display:none;margin-top:10px;gap:6px;justify-content:center">
+          <button type="button" class="btn btn--sm btn--ghost photo-picker-rotate" data-target="{{ dtype }}">↻ {{ t('አዙር','Rotate') }}</button>
+          <button type="submit" class="btn btn--sm btn--primary">{{ ic.icon('check',13) }} {{ t('ስቀል','Upload') }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('ሌላ ሰነድ ስቀል','Upload Another Document') }}</h3><p>{{ t('የትምህርት፣ የስራ ልምድ ወይም ሌላ ማስረጃ','Education, experience, or other supporting documents') }}</p></div>
+  <div class="panel__body">
+    <form method="post" enctype="multipart/form-data">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="dropzone2" style="margin-bottom:18px">
+        <div class="dropzone2__icon">{{ ic.icon('upload',22) }}</div>
+        <p style="font-weight:700;margin-bottom:4px">{{ t('ፋይል ለመስቀል ይምረጡ','Choose a file to upload') }}</p>
+        <p style="color:var(--ink-muted);font-size:13px;margin-bottom:16px">PDF, JPG, PNG — {{ t('ከ5MB በታች','under 5MB') }}</p>
+        <input type="file" name="document" accept=".pdf,.jpg,.jpeg,.png" style="max-width:320px;margin:0 auto">
+      </div>
+      <div style="display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap">
+        <div class="field" style="flex:1;min-width:200px;margin-bottom:0">
+          <label>{{ t('የሰነድ አይነት','Document type') }}</label>
+          <select name="doc_type">{% for dt in doc_types %}<option value="{{ dt }}">{{ t(doc_labels_am[dt], doc_labels_en[dt]) }}</option>{% endfor %}</select>
+        </div>
+        <button type="submit" class="btn btn--primary">{{ ic.icon('upload',16) }} {{ t('ስቀል','Upload') }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel__head"><h3>{{ t('የተሰቀሉ ሰነዶች','Uploaded Documents') }}</h3></div>
+  {% if documents %}
+  <div class="table-wrap">
+    <table class="tbl2">
+      <thead><tr><th>{{ t('አይነት','Type') }}</th><th>{{ t('ፋይል ስም','Filename') }}</th><th>{{ t('ሁኔታ','Status') }}</th><th>{{ t('የተሰቀለበት ቀን','Uploaded') }}</th></tr></thead>
+      <tbody>
+        {% for d in documents %}
+        <tr><td>{{ t(doc_labels_am.get(d.doc_type, d.doc_type), doc_labels_en.get(d.doc_type, d.doc_type)) }}</td><td>{{ d.original_filename }}</td><td><span class="pill pill-{{ d.status }}"><span class="dot"></span>{{ d.status }}</span></td><td>{{ d.uploaded_at.strftime('%Y-%m-%d') }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state2">
+    <div class="empty-state2__icon">{{ ic.icon('upload',24) }}</div>
+    <p>{{ t('እስካሁን ምንም ሰነድ አልተሰቀለም።','No documents uploaded yet.') }}</p>
+  </div>
+  {% endif %}
+</div>
+
+<script>
+// ===== Live photo preview + rotate-before-upload (portrait/full/passport slots) =====
+(function () {
+  const state = {}; // dtype -> { img, rotation, isImage }
+
+  function redraw(dtype) {
+    const s = state[dtype];
+    const box = document.getElementById('picker_' + dtype);
+    if (!s || !s.isImage) return;
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const swap = s.rotation % 180 !== 0;
+    canvas.width = swap ? s.img.height : s.img.width;
+    canvas.height = swap ? s.img.width : s.img.height;
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate((s.rotation * Math.PI) / 180);
+    ctx.drawImage(s.img, -s.img.width / 2, -s.img.height / 2);
+
+    box.innerHTML = '';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.objectFit = 'cover';
+    box.appendChild(canvas);
+  }
+
+  function setInputFromCanvas(dtype, inputEl, originalFile) {
+    const box = document.getElementById('picker_' + dtype);
+    const canvas = box.querySelector('canvas');
+    if (!canvas) return; // non-image file, leave input as-is
+
+    canvas.toBlob((blob) => {
+      const rotatedFile = new File([blob], originalFile.name, { type: 'image/jpeg' });
+      const dt = new DataTransfer();
+      dt.items.add(rotatedFile);
+      inputEl.files = dt.files;
+    }, 'image/jpeg', 0.9);
+  }
+
+  document.querySelectorAll('.photo-picker-input').forEach((input) => {
+    const dtype = input.getAttribute('data-target');
+
+    input.addEventListener('change', () => {
+      const file = input.files[0];
+      if (!file) return;
+      const actions = document.getElementById('actions_' + dtype);
+      const box = document.getElementById('picker_' + dtype);
+
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            state[dtype] = { img: img, rotation: 0, isImage: true };
+            redraw(dtype);
+            actions.style.display = 'flex';
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        state[dtype] = { isImage: false };
+        box.innerHTML = '<span style="font-size:11px;padding:4px">' + file.name + '</span>';
+        actions.style.display = 'flex';
+      }
+    });
+  });
+
+  document.querySelectorAll('.photo-picker-rotate').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const dtype = btn.getAttribute('data-target');
+      const s = state[dtype];
+      if (!s || !s.isImage) return;
+      s.rotation = (s.rotation + 90) % 360;
+      redraw(dtype);
+    });
+  });
+
+  document.querySelectorAll('.photo-picker-form').forEach((form) => {
+    form.addEventListener('submit', () => {
+      const input = form.querySelector('.photo-picker-input');
+      const dtype = input.getAttribute('data-target');
+      const file = input.files[0];
+      if (file) setInputFromCanvas(dtype, input, file);
+    });
+  });
+})();
+</script>
+{% endblock %}

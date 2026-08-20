@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('የሚያስፈልጉ ሰነዶች ዝርዝር','Document Checklist') }} — {{ company_name }}{% endblock %}
+{% block content %}
+<section>
+  <div class="wrap no-print" style="text-align:right;max-width:640px">
+    <button onclick="window.print()" class="btn btn--primary btn--sm">🖨️ {{ t('አትም / PDF አድርገው ያውርዱ','Print / Save as PDF') }}</button>
+  </div>
+  <div class="wrap" style="max-width:640px">
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid var(--line)">
+        <span class="brand__mark"><img src="{{ url_for('static', filename='img/logo-nav.png') }}" alt="ASM logo"></span>
+        <div>
+          <h1 style="font-size:19px">{{ t('ከመመዝገብዎ በፊት የሚያስፈልጉ ሰነዶች','Documents to Prepare Before You Register') }}</h1>
+          <p style="color:var(--ink-muted);font-size:13px">{{ company_name }}</p>
+        </div>
+      </div>
+
+      {% set checklist = [
+        (t('ፓስፖርት (ዋናው)','Original Passport'), t('ቢያንስ ለ2 ዓመታት የሚያገለግል','Valid for at least 2 more years')),
+        (t('የቁም ፎቶ','Portrait Photo'), t('ግልጽ የፊት ፎቶ፣ ነጭ background','Clear headshot, white background')),
+        (t('ጉርድ ፎቶ (ሙሉ ቁመት)','Full-Length Photo'), t('ቆመው የተነሱት ፎቶ','Standing photo, full body')),
+        (t('የትምህርት ማስረጃ','Education Certificate'), t('የመጨረሻ ደረጃ ማስረጃ ኮፒ','Copy of your highest completed level')),
+        (t('የስራ ልምድ ማስረጃ (ካለ)','Experience Letter (if any)'), t('ከቀድሞ ስራ ካለ','If you have prior work experience')),
+        (t('የጤና ማረጋገጫ','Medical Certificate'), t('ከተፈቀደ ክሊኒክ','From an approved clinic')),
+        (t('የስልክ ቁጥር እና ኢሜይል','Phone Number & Email'), t('ለምዝገባ እና ለማሳወቂያ','For registration and notifications')),
+      ] %}
+
+      <div style="display:flex;flex-direction:column;gap:2px">
+        {% for title, note in checklist %}
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)">
+          <div style="width:20px;height:20px;border:2px solid var(--pro-blue);border-radius:5px;flex-shrink:0;margin-top:2px"></div>
+          <div>
+            <div style="font-weight:700;font-size:14.5px">{{ title }}</div>
+            <div style="font-size:12.5px;color:var(--ink-muted)">{{ note }}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div style="margin-top:20px;padding-top:16px;border-top:2px solid var(--line);font-size:11.5px;color:var(--ink-muted)">
+        📞 {{ company_phone }} &nbsp;·&nbsp; ✉️ {{ company_email }}<br>
+        📍 {{ t(company_address_am, company_address_en) }}
+      </div>
+    </div>
+  </div>
+</section>
+<style>@media print{.no-print{display:none}}</style>
+{% endblock %}

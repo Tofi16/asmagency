@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ t('ስለ እኛ','About Us') }} — {{ company_name }}{% endblock %}
+{% block content %}
+<section>
+  <div class="wrap" style="max-width:760px">
+    <span class="kicker">{{ t('ስለ እኛ','About Us') }}</span>
+    <h1 style="font-size:32px;margin-bottom:18px">{{ company_name }}</h1>
+    <p style="color:var(--ink-muted);font-size:16.5px;margin-bottom:16px">
+      {{ t('ኢትዮጵያ ውስጥ ላሉ ተሰጥዖ ያላቸው ዜጎች ወደ ውጭ ሀገር የስራ እድል በአስተማማኝ እና ግልጽ በሆነ መንገድ የምናገናኝ ኤጀንሲ ነን።',
+           'We are a licensed agency connecting talented Ethiopians to overseas job opportunities through a secure, transparent process.') }}
+    </p>
+    <p style="color:var(--ink-muted);font-size:16.5px">
+      {{ t('ከምዝገባ እስከ መነሳት፣ እና ከዚያም በኋላ በ24/7 ድጋፍ አብረውት እንቆያለን።',
+           'From registration to departure — and beyond, with 24/7 support — we stay with you every step.') }}
+    </p>
+  </div>
+</section>
+{% endblock %}
