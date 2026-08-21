@@ -8,12 +8,12 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     """Base configuration shared by all environments."""
 
-    SECRET_KEY = os.environ.get("SECRET_KEY", "dev-key-change-this-before-deploying")
+    SECRET_KEY = os.environ.get("SECRET_KEY") or "dev-key-change-this-before-deploying"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # --- Uploads ---
-    UPLOAD_FOLDER = os.environ.get(
-        "UPLOAD_FOLDER", os.path.join(basedir, "app", "static", "uploads")
+    UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER") or os.path.join(
+        basedir, "app", "static", "uploads"
     )
     MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH") or 5 * 1024 * 1024)  # 5MB
 
@@ -24,7 +24,7 @@ class Config:
     SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", "False") == "True"
 
     # --- Rate limiting ---
-    RATELIMIT_STORAGE_URI = os.environ.get("RATELIMIT_STORAGE_URI", "memory://")
+    RATELIMIT_STORAGE_URI = os.environ.get("RATELIMIT_STORAGE_URI") or "memory://"
     RATELIMIT_HEADERS_ENABLED = True
 
     # --- Caching ---
