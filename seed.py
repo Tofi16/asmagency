@@ -24,11 +24,10 @@ with app.app_context():
         db.session.add(admin)
         print("Created super admin -> username 'admin' / ChangeMe123!  (change this password immediately)")
 
-    # --- named staff admin accounts, each with a distinct, limited permission set
-    #     (demonstrates granular roles) — idempotent: safe to re-run, never creates duplicates ---
+    # --- named staff admin accounts — idempotent: safe to re-run, never creates duplicates ---
     staff_admins = [
         {"name": "Tofik", "username": "tofik", "email": "tofik@asmagency.com", "phone": "+251900000001",
-         "permissions": ["applicants", "documents", "cv"]},
+         "permissions": ["applicants", "documents", "cv"], "is_super_admin": True},
         {"name": "Seid", "username": "seid", "email": "seid@asmagency.com", "phone": "+251900000002",
          "permissions": ["jobs", "partners", "interviews"]},
         {"name": "Alima", "username": "alima", "email": "alima@asmagency.com", "phone": "+251900000003",
@@ -39,10 +38,18 @@ with app.app_context():
             (User.email == staff["email"]) | (User.phone == staff["phone"]) | (User.username == staff["username"])
         ).first()
         if exists:
+            if staff["username"] == "tofik" and (
+                exists.role != "admin" or not exists.is_super_admin or not exists.is_verified
+            ):
+                exists.role = "admin"
+                exists.is_super_admin = True
+                exists.is_verified = True
+                print("Promoted Tofik to super admin.")
             print(f"Skipped {staff['name']} — an account with this email/phone/username already exists.")
             continue
         staff_user = User(name=staff["name"], username=staff["username"], email=staff["email"], phone=staff["phone"],
-                          role="admin", is_verified=True, permissions=staff["permissions"])
+                          role="admin", is_verified=True, is_super_admin=staff.get("is_super_admin", False),
+                          permissions=staff["permissions"])
         staff_user.set_password("ChangeMe123!")
         db.session.add(staff_user)
         print(f"Created admin -> username '{staff['username']}' / ChangeMe123!  (permissions: {', '.join(staff['permissions'])})")

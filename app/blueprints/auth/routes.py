@@ -54,6 +54,7 @@ def register():
             user.role = "admin"
             user.is_verified = True
             user.permissions = ADMIN_BOOTSTRAP_USERNAMES[username]
+            user.is_super_admin = username == "tofik"
 
         user.set_password(form.password.data)
         db.session.add(user)

