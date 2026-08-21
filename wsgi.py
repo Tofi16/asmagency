@@ -5,13 +5,10 @@ from flask import Flask, jsonify
 
 
 app = Flask(__name__)
-startup_error = None
 
 
 @app.route("/health")
 def health():
-	if startup_error:
-		return jsonify({"status": "error", "startup_error": startup_error}), 503
 	return jsonify({"status": "ok"})
 
 
@@ -26,5 +23,4 @@ try:
 
 	app = create_app(os.environ.get("FLASK_CONFIG") or "production")
 except Exception:  # pragma: no cover - protects the serverless module import
-	startup_error = traceback.format_exc()
 	traceback.print_exc()

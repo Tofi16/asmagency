@@ -28,7 +28,7 @@ class Config:
     RATELIMIT_HEADERS_ENABLED = True
 
     # --- Caching ---
-    CACHE_TYPE = os.environ.get("CACHE_TYPE", "SimpleCache")
+    CACHE_TYPE = os.environ.get("CACHE_TYPE") or "SimpleCache"
     CACHE_DEFAULT_TIMEOUT = 300
 
     # --- Company info (used across templates) ---
