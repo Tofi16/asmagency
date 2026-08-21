@@ -1,15 +1,10 @@
 import os
+import traceback
 
-try:
-    from app import create_app
-except Exception:  # pragma: no cover
-    create_app = None
+from flask import Flask, jsonify
 
-if create_app is not None:
-    app = create_app(os.environ.get("FLASK_CONFIG") or "production")
-else:
-    from flask import Flask, jsonify
 
+def _fallback_app():
     app = Flask(__name__)
 
     @app.route("/health")
@@ -20,3 +15,14 @@ else:
     @app.route("/<path:path>")
     def fallback(path=""):
         return jsonify({"status": "ok", "message": "App is starting"}), 200
+
+    return app
+
+
+try:
+    from app import create_app
+
+    app = create_app(os.environ.get("FLASK_CONFIG") or "production")
+except Exception:  # pragma: no cover
+    traceback.print_exc()
+    app = _fallback_app()
