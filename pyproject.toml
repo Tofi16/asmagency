@@ -27,4 +27,4 @@ package = false
 venvPath = "."
 
 [tool.vercel]
-entrypoint = "run:app"
+entrypoint = "wsgi:app"

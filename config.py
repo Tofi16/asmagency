@@ -1,4 +1,5 @@
 import os
+import tempfile
 from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -53,13 +54,15 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
-    UPLOAD_FOLDER = os.environ.get("UPLOAD_FOLDER", "/tmp/asm-agency-uploads")
+    UPLOAD_FOLDER = os.environ.get(
+        "UPLOAD_FOLDER", os.path.join(tempfile.gettempdir(), "asm-agency-uploads")
+    )
     SQLALCHEMY_DATABASE_URI = (
         os.environ.get("DATABASE_URL")
         or os.environ.get("POSTGRES_PRISMA_URL")
         or os.environ.get("POSTGRES_URL")
         or os.environ.get("POSTGRES_URL_NON_POOLING")
-        or "sqlite:////tmp/asm-agency.db"
+        or "sqlite:///:memory:"
     )
     SESSION_COOKIE_SECURE = True
 
