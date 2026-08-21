@@ -57,12 +57,19 @@ class ProductionConfig(Config):
     UPLOAD_FOLDER = os.environ.get(
         "UPLOAD_FOLDER", os.path.join(tempfile.gettempdir(), "asm-agency-uploads")
     )
-    SQLALCHEMY_DATABASE_URI = (
+    raw_database_url = (
         os.environ.get("DATABASE_URL")
         or os.environ.get("POSTGRES_PRISMA_URL")
         or os.environ.get("POSTGRES_URL")
         or os.environ.get("POSTGRES_URL_NON_POOLING")
-        or "sqlite:///:memory:"
+        or ""
+    ).strip().strip('"').strip("'")
+    if raw_database_url.startswith("postgres://"):
+        raw_database_url = raw_database_url.replace("postgres://", "postgresql://", 1)
+    SQLALCHEMY_DATABASE_URI = (
+        raw_database_url
+        if raw_database_url.startswith(("postgresql://", "sqlite://"))
+        else "sqlite:///:memory:"
     )
     SESSION_COOKIE_SECURE = True
 
@@ -70,9 +77,7 @@ class ProductionConfig(Config):
     def init_app(cls, app):
         database_url = app.config.get("SQLALCHEMY_DATABASE_URI")
         if database_url and database_url.startswith("postgres://"):
-            app.config["SQLALCHEMY_DATABASE_URI"] = database_url.replace(
-                "postgres://", "postgresql://", 1
-            )
+            app.config["SQLALCHEMY_DATABASE_URI"] = database_url.replace("postgres://", "postgresql://", 1)
 
 
 config_by_name = {
