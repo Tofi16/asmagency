@@ -40,22 +40,27 @@
 
   .partner-note{position:relative;background:var(--canvas);border:1px dashed var(--pro-blue);border-radius:7px;padding:7px 12px;font-size:10.5px;margin-bottom:14px;color:var(--authority)}
 
-  .name-block{margin-bottom:16px;text-align:center}
-  .name-block .en{font-family:'Poppins';font-weight:800;font-size:21px;color:var(--authority);letter-spacing:-.01em}
-  .name-block .ar{font-size:11.5px;color:var(--ink-muted);direction:rtl;margin-top:2px}
-  .name-block__chips{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap;justify-content:center}
-  .name-chip{background:#E8F7FD;color:var(--pro-blue-dark);font-size:10.5px;font-weight:700;padding:4px 11px;border-radius:999px;border:1px solid #cdeaf7}
+  .name-block{margin-bottom:10px;text-align:center}
+  .name-block .en{font-family:'Poppins';font-weight:800;font-size:18px;color:var(--authority);letter-spacing:-.01em}
+  .name-block .ar{font-size:10.5px;color:var(--ink-muted);direction:rtl;margin-top:2px}
+  .name-block__chips{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;justify-content:center}
+  .name-chip{background:#E8F7FD;color:var(--pro-blue-dark);font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;border:1px solid #cdeaf7}
 
-  /* ===== Photo showcase — the 2 large, uncropped photos ===== */
-  .photo-showcase{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
-  .showcase-box{border-radius:12px;border:3px solid var(--pro-blue);overflow:hidden;position:relative;box-shadow:0 10px 26px -8px rgba(37,170,226,.4);background:#fff;min-height:300px;display:flex;align-items:center;justify-content:center}
+  /* Compact profile layout: details beside the full-length photo. */
+  .profile-row{display:grid;grid-template-columns:1fr 190px;gap:16px;align-items:start;margin-bottom:14px}
+  .photo-block{position:relative}
+  .showcase-box{border-radius:10px;border:3px solid var(--pro-blue);overflow:hidden;position:relative;box-shadow:0 8px 20px -6px rgba(37,170,226,.4);background:#fff;display:flex;align-items:center;justify-content:center}
+  .showcase-box--full{height:230px}
+  .showcase-box--passport{min-height:460px}
   .showcase-box img{width:100%;height:100%;object-fit:contain;background:#fff}
   .showcase-box .photo-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#b7bcc8}
-  .showcase-box .photo-placeholder svg{width:40px;height:40px;opacity:.55}
-  .showcase-box .photo-placeholder span{font-size:10px;font-weight:700;text-align:center;padding:0 10px}
-  .showcase-label{font-family:'Poppins';font-size:10.5px;font-weight:800;text-align:center;color:var(--authority);margin-top:8px;text-transform:uppercase;letter-spacing:.05em}
-  .showcase-label .ar{display:block;font-family:'Inter';font-weight:600;font-size:9.5px;color:var(--ink-muted);text-transform:none;direction:rtl;margin-top:1px}
-  .verified-ribbon{position:absolute;top:10px;right:-30px;background:linear-gradient(90deg,var(--gold),#e2a12a);color:var(--authority);font-size:8px;font-weight:800;padding:3px 32px;transform:rotate(35deg);box-shadow:0 3px 8px rgba(0,0,0,.25);letter-spacing:.05em}
+  .showcase-box .photo-placeholder svg{width:32px;height:32px;opacity:.55}
+  .showcase-box .photo-placeholder span{font-size:9px;font-weight:700;text-align:center;padding:0 8px}
+  .showcase-label{font-family:'Poppins';font-size:9.5px;font-weight:800;text-align:center;color:var(--authority);margin-top:6px;text-transform:uppercase;letter-spacing:.05em}
+  .showcase-label .ar{display:block;font-family:'Inter';font-weight:600;font-size:8.5px;color:var(--ink-muted);text-transform:none;direction:rtl;margin-top:1px}
+  .verified-ribbon{position:absolute;top:8px;right:-28px;background:linear-gradient(90deg,var(--gold),#e2a12a);color:var(--authority);font-size:7px;font-weight:800;padding:2px 28px;transform:rotate(35deg);box-shadow:0 3px 8px rgba(0,0,0,.25);letter-spacing:.05em}
+
+  .passport-page{margin-top:18px}
 
   .section-title{position:relative;background:linear-gradient(90deg,var(--authority),#2a2b45);color:#fff;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:6px;margin:18px 0 9px;display:flex;justify-content:space-between;align-items:center;border-left:4px solid var(--gold)}
   .section-title .ar{direction:rtl;font-weight:600;opacity:.85}
@@ -98,8 +103,9 @@
     .doc-head{flex-wrap:wrap;justify-content:center;text-align:center}
     .doc-head__title{order:-1;width:100%}
     .info-chips{grid-template-columns:1fr 1fr}
-    .photo-showcase{grid-template-columns:1fr}
-    .showcase-box{min-height:260px}
+    .profile-row{grid-template-columns:1fr}
+    .showcase-box--full{height:260px}
+    .showcase-box--passport{min-height:320px}
     table.info-tbl td.label-ar{display:none}
     table.info-tbl td.label-en{width:44%}
     table.info-tbl td.value{width:56%}
@@ -115,6 +121,11 @@
     .sheet{box-shadow:none;border-radius:0;max-width:none}
     .sheet__inner{padding:10mm 13mm}
     @page{size:A4;margin:0}
+    .doc-head,.info-chips,.partner-note,.name-block,.profile-row,.photo-block,.showcase-box,
+    table.info-tbl,table.info-tbl tr,table.hist-tbl,table.hist-tbl tr,.emergency-tbl,
+    .emergency-tbl tr,.section-title,.doc-footer{break-inside:avoid;page-break-inside:avoid}
+    .section-title{break-after:avoid;page-break-after:avoid}
+    .passport-page{break-before:page;page-break-before:always}
   }
 </style>
 </head>
@@ -168,10 +179,19 @@
       </div>
     </div>
 
-    <!-- Photo showcase — large, uncropped (object-fit:contain), so the full photo is always visible -->
-    <div class="photo-showcase">
+    <div class="profile-row">
       <div>
-        <div class="showcase-box">
+        <div class="section-title"><span>Personal Information</span><span class="ar">المعلومات الشخصية</span></div>
+        <table class="info-tbl">
+          <tr><td class="label-en">Religion</td><td class="label-ar">الديانة</td><td class="value">{{ profile.religion or '—' }}</td></tr>
+          <tr><td class="label-en">Date of Birth</td><td class="label-ar">تاريخ الميلاد</td><td class="value">{{ applicant.date_of_birth.strftime('%d %m %Y') if applicant.date_of_birth else '—' }}</td></tr>
+          <tr><td class="label-en">Place of Birth</td><td class="label-ar">مكان الميلاد</td><td class="value">{{ profile.place_of_birth or '—' }}</td></tr>
+          <tr><td class="label-en">Weight / Height</td><td class="label-ar">الوزن / الطول</td><td class="value">{{ (profile.weight_kg ~ ' kg') if profile.weight_kg else '—' }} / {{ (profile.height_m ~ ' m') if profile.height_m else '—' }}</td></tr>
+          <tr><td class="label-en">Education</td><td class="label-ar">المؤهل العلمي</td><td class="value">{{ applicant.education_level or '—' }}</td></tr>
+        </table>
+      </div>
+      <div class="photo-block photo-block--full">
+        <div class="showcase-box showcase-box--full">
           {% if full_doc %}
             <img src="{{ url_for('static', filename='uploads/' ~ full_doc.stored_filename) }}" alt="Full-Length Photo">
             <div class="verified-ribbon">VERIFIED</div>
@@ -184,37 +204,7 @@
         </div>
         <div class="showcase-label">Full-Length Photo<span class="ar">صورة كاملة</span></div>
       </div>
-      <div>
-        <div class="showcase-box">
-          {% if passport_doc %}
-            {% if passport_doc.stored_filename.lower().endswith(('.jpg', '.jpeg', '.png')) %}
-              <img src="{{ url_for('static', filename='uploads/' ~ passport_doc.stored_filename) }}" alt="Passport Copy">
-              <div class="verified-ribbon">VERIFIED</div>
-            {% else %}
-              <div class="photo-placeholder">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/></svg>
-                <span>Passport on file as PDF — see Verify Documents</span>
-              </div>
-            {% endif %}
-          {% else %}
-            <div class="photo-placeholder">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z"/></svg>
-              <span>Passport copy pending</span>
-            </div>
-          {% endif %}
-        </div>
-        <div class="showcase-label">Passport Copy<span class="ar">نسخة جواز السفر</span></div>
-      </div>
     </div>
-
-    <div class="section-title"><span>Personal Information</span><span class="ar">المعلومات الشخصية</span></div>
-    <table class="info-tbl">
-      <tr><td class="label-en">Religion</td><td class="label-ar">الديانة</td><td class="value">{{ profile.religion or '—' }}</td></tr>
-      <tr><td class="label-en">Date of Birth</td><td class="label-ar">تاريخ الميلاد</td><td class="value">{{ applicant.date_of_birth.strftime('%d %m %Y') if applicant.date_of_birth else '—' }}</td></tr>
-      <tr><td class="label-en">Place of Birth</td><td class="label-ar">مكان الميلاد</td><td class="value">{{ profile.place_of_birth or '—' }}</td></tr>
-      <tr><td class="label-en">Weight / Height</td><td class="label-ar">الوزن / الطول</td><td class="value">{{ (profile.weight_kg ~ ' kg') if profile.weight_kg else '—' }} / {{ (profile.height_m ~ ' m') if profile.height_m else '—' }}</td></tr>
-      <tr><td class="label-en">Education</td><td class="label-ar">المؤهل العلمي</td><td class="value">{{ applicant.education_level or '—' }}</td></tr>
-    </table>
 
     <div class="section-title"><span>Passport Details</span><span class="ar">بيانات جواز السفر</span></div>
     <table class="info-tbl">
@@ -267,6 +257,28 @@
       <tr><td class="label">Full Name</td><td>{{ profile.emergency_contact_name or '—' }}</td><td class="label">Phone</td><td>{{ profile.emergency_contact_phone or '—' }}</td></tr>
       <tr><td class="label">Address</td><td colspan="3">{{ profile.emergency_contact_address or '—' }}</td></tr>
     </table>
+
+    <div class="photo-block photo-block--passport passport-page">
+      <div class="showcase-box showcase-box--passport">
+        {% if passport_doc %}
+          {% if passport_doc.stored_filename.lower().endswith(('.jpg', '.jpeg', '.png')) %}
+            <img src="{{ url_for('static', filename='uploads/' ~ passport_doc.stored_filename) }}" alt="Passport Copy">
+            <div class="verified-ribbon">VERIFIED</div>
+          {% else %}
+            <div class="photo-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1 1z"/></svg>
+              <span>Passport on file as PDF — see Verify Documents</span>
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1 1z"/></svg>
+            <span>Passport copy pending</span>
+          </div>
+        {% endif %}
+      </div>
+      <div class="showcase-label">Passport Copy<span class="ar">نسخة جواز السفر</span></div>
+    </div>
 
     <div class="doc-footer">
       <div>
