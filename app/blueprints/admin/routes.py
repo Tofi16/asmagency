@@ -420,6 +420,8 @@ def cv_form(applicant_id):
         log_action("cv.create" if is_new else "cv.update", "CVProfile", profile.id, applicant.full_name)
         db.session.commit()
         flash("የCV መገለጫ ተቀምጧል። / CV profile saved.", "success")
+        if request.form.get("action") == "preview" and not photo_errors:
+            return redirect(url_for("admin.cv_print", applicant_id=applicant.id))
         return redirect(url_for("admin.cv_form", applicant_id=applicant.id))
 
     partners = Partner.query.filter_by(is_active=True).order_by(Partner.name).all()

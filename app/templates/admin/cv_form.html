@@ -19,14 +19,14 @@
   </div>
   {% if profile %}
   <div style="display:flex;gap:8px;flex-wrap:wrap">
-    <a href="{{ url_for('admin.cv_print', applicant_id=applicant.id) }}" target="_blank" class="btn btn--ghost btn--sm">{{ ic.icon('file',14) }} {{ t('ቅድመ እይታ','Preview') }}</a>
+    <button type="submit" name="action" value="preview" form="cv-form" class="btn btn--ghost btn--sm">{{ ic.icon('file',14) }} {{ t('ቅድመ እይታ','Preview') }}</button>
     <a href="{{ url_for('admin.cv_export_docx', applicant_id=applicant.id) }}" class="btn btn--ghost btn--sm">{{ ic.icon('upload',14) }} {{ t('Word አውርድ','Save as Word') }}</a>
     <a href="{{ url_for('admin.cv_print', applicant_id=applicant.id) }}" target="_blank" class="btn btn--primary btn--sm">{{ ic.icon('file',14) }} {{ t('PDF አትም','Save as PDF') }}</a>
   </div>
   {% endif %}
 </div>
 
-<form method="post" enctype="multipart/form-data">
+<form id="cv-form" method="post" enctype="multipart/form-data">
   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
   <div class="panel">
