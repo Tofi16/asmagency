@@ -49,12 +49,10 @@ def create_app(config_name=None):
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(api_bp, url_prefix="/api/v1")
 
-    # Vercel has no persistent local database. Bootstrap the temporary SQLite
-    # fallback so the public app can serve requests without a configured DB.
-    if app.config["SQLALCHEMY_DATABASE_URI"].startswith("sqlite:"):
-        from app import models  # noqa: F401
-        with app.app_context():
-            db.create_all()
+    # Ensure a fresh Vercel database can serve requests before migrations run.
+    from app import models  # noqa: F401
+    with app.app_context():
+        db.create_all()
 
     # --- Bilingual helper + globals available in every template ---
     @app.context_processor
