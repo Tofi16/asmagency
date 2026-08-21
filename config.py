@@ -15,7 +15,7 @@ class Config:
     UPLOAD_FOLDER = os.environ.get(
         "UPLOAD_FOLDER", os.path.join(basedir, "app", "static", "uploads")
     )
-    MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH", 5 * 1024 * 1024))  # 5MB
+    MAX_CONTENT_LENGTH = int(os.environ.get("MAX_CONTENT_LENGTH") or 5 * 1024 * 1024)  # 5MB
 
     # --- Session / cookies ---
     PERMANENT_SESSION_LIFETIME = timedelta(days=7)
