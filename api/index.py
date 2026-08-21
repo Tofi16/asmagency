@@ -16,7 +16,6 @@ def _fallback_app():
 	def fallback(path=""):
 		return jsonify({"status": "ok", "message": "App is starting"}), 200
 	return fallback
-	return fallback
 
 try:
 	from app import create_app

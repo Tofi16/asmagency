@@ -25,6 +25,3 @@ package = false
 
 [tool.pyright]
 venvPath = "."
-
-[tool.vercel]
-entrypoint = "api.index:app"
