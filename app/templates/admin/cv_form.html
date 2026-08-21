@@ -34,7 +34,7 @@
     <div class="panel__body" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:620px">
       <div class="cv-photo-slot">
         <label class="cv-photo-slot__frame" style="aspect-ratio:3/4">
-          {% if portrait_doc %}
+          {% if portrait_doc and document_url(portrait_doc) %}
             <img src="{{ document_url(portrait_doc) }}" alt="{{ t('አነስተኛ የመታወቂያ ፎቶ','Small ID Photo') }}">
           {% else %}
             <span class="cv-photo-slot__placeholder">{{ ic.icon('user',26) }} {{ t('ፎቶ ይምረጡ','Choose photo') }}</span>
@@ -47,7 +47,7 @@
       </div>
       <div class="cv-photo-slot">
         <label class="cv-photo-slot__frame" style="aspect-ratio:3/5">
-          {% if full_doc %}
+          {% if full_doc and document_url(full_doc) %}
             <img src="{{ document_url(full_doc) }}" alt="{{ t('ሙሉ ቁመት ፎቶ','Full-Length Photo') }}">
           {% else %}
             <span class="cv-photo-slot__placeholder">{{ ic.icon('user',26) }} {{ t('ፎቶ ይምረጡ','Choose photo') }}</span>
@@ -60,7 +60,7 @@
       </div>
       <div class="cv-photo-slot">
         <label class="cv-photo-slot__frame" style="aspect-ratio:4/3">
-          {% if passport_doc %}
+          {% if passport_doc and document_url(passport_doc) %}
             <img src="{{ document_url(passport_doc) }}" alt="{{ t('የፓስፖርት ፎቶ','Passport Photo') }}">
           {% else %}
             <span class="cv-photo-slot__placeholder">{{ ic.icon('file',26) }} {{ t('ፎቶ ይምረጡ','Choose photo') }}</span>

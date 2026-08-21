@@ -54,4 +54,6 @@ def document_url(document):
         return ""
     if document.file_path and document.file_path.startswith(("http://", "https://")):
         return document.file_path
+    if not document.file_path or not os.path.exists(document.file_path):
+        return ""
     return url_for("static", filename=f"uploads/{document.stored_filename}")

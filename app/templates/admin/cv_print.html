@@ -175,7 +175,7 @@
 
     <div class="doc-head">
       <div class="doc-head__portrait">
-        {% if portrait_doc %}
+        {% if portrait_doc and document_url(portrait_doc) %}
           <img src="{{ document_url(portrait_doc) }}" alt="Portrait photo">
         {% else %}
           <div class="photo-placeholder">
@@ -224,7 +224,7 @@
       </div>
       <div class="photo-block photo-block--full">
         <div class="showcase-box showcase-box--full">
-          {% if full_doc %}
+          {% if full_doc and document_url(full_doc) %}
             <img src="{{ document_url(full_doc) }}" alt="Full-Length Photo">
             <div class="verified-ribbon">VERIFIED</div>
           {% else %}
@@ -308,7 +308,7 @@
 
     <div class="photo-block photo-block--passport passport-page">
       <div class="showcase-box showcase-box--passport">
-        {% if passport_doc %}
+        {% if passport_doc and document_url(passport_doc) %}
           {% if passport_doc.stored_filename.lower().endswith(('.jpg', '.jpeg', '.png')) %}
             <img src="{{ document_url(passport_doc) }}" alt="Passport Copy">
             <div class="verified-ribbon">VERIFIED</div>
