@@ -53,13 +53,25 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
+    SQLALCHEMY_DATABASE_URI = (
+        os.environ.get("DATABASE_URL")
+        or os.environ.get("POSTGRES_PRISMA_URL")
+        or os.environ.get("POSTGRES_URL")
+        or os.environ.get("POSTGRES_URL_NON_POOLING")
+    )
     SESSION_COOKIE_SECURE = True
 
     @classmethod
     def init_app(cls, app):
-        if not os.environ.get("DATABASE_URL"):
-            raise RuntimeError("DATABASE_URL must be set in production")
+        database_url = app.config.get("SQLALCHEMY_DATABASE_URI")
+        if database_url and database_url.startswith("postgres://"):
+            app.config["SQLALCHEMY_DATABASE_URI"] = database_url.replace(
+                "postgres://", "postgresql://", 1
+            )
+        if not database_url:
+            raise RuntimeError(
+                "DATABASE_URL or a Vercel Postgres URL variable must be set in production"
+            )
         if os.environ.get("SECRET_KEY", "dev-key-change-this-before-deploying") == "dev-key-change-this-before-deploying":
             raise RuntimeError("SECRET_KEY must be overridden in production")
 
