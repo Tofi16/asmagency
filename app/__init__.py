@@ -1,5 +1,4 @@
 import os
-import traceback
 from flask import Flask, render_template, session
 
 from config import config_by_name
@@ -83,14 +82,8 @@ def create_app(config_name=None):
 
     @app.errorhandler(500)
     def server_error(e):
-        app.config["LAST_ERROR"] = traceback.format_exc()
         db.session.rollback()
         return render_template("errors/500.html"), 500
-
-    @app.route("/health")
-    def health():
-        error = app.config.get("LAST_ERROR")
-        return {"status": "error", "error": error} if error else {"status": "ok"}
 
     # --- Make sure the upload folder exists ---
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
