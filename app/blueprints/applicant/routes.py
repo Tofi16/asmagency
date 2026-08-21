@@ -7,7 +7,7 @@ from app.extensions import db
 from app.models.document import Document
 from app.models.application import Application
 from app.utils.decorators import applicant_required
-from app.utils.storage import save_upload
+from app.utils.storage import UploadStorageError, save_upload
 
 
 @applicant_bp.route("/dashboard")
@@ -75,7 +75,11 @@ def uploads():
             flash("የማይፈቀድ የፋይል አይነት (pdf, jpg, png ብቻ)። / File type not allowed (pdf, jpg, png only).", "danger")
             return redirect(url_for("applicant.uploads"))
 
-        stored_name, file_path, file_size = save_upload(file)
+        try:
+            stored_name, file_path, file_size = save_upload(file)
+        except UploadStorageError as exc:
+            flash(str(exc), "danger")
+            return redirect(url_for("applicant.uploads"))
 
         doc = Document(
             applicant_id=applicant.id,

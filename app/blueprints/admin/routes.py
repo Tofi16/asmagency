@@ -25,7 +25,7 @@ from app.models.review import Review
 from app.utils.decorators import admin_required, permission_required, super_admin_required
 from app.utils.audit import log_action
 from app.utils.cv_docx import build_cv_docx
-from app.utils.storage import save_upload
+from app.utils.storage import UploadStorageError, save_upload
 
 
 def _shift_month(dt, n):
@@ -276,7 +276,10 @@ def _save_cv_photo(applicant, doc_type, file):
     if ext not in Document.ALLOWED_EXTENSIONS:
         return None, "የማይፈቀድ የፋይል አይነት (jpg, png, pdf ብቻ)። / File type not allowed (jpg, png, pdf only)."
 
-    stored_name, file_path, file_size = save_upload(file, folder="asm-agency/cv")
+    try:
+        stored_name, file_path, file_size = save_upload(file, folder="asm-agency/cv")
+    except UploadStorageError as exc:
+        return None, str(exc)
 
     # Replace the existing photo of this type in place — a CV should show
     # only its current photo, not pile up old ones every time it's edited.

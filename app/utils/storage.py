@@ -5,6 +5,10 @@ from flask import current_app, url_for
 from werkzeug.utils import secure_filename
 
 
+class UploadStorageError(RuntimeError):
+    """Raised when the configured remote upload provider rejects a file."""
+
+
 def cloudinary_enabled():
     return bool(
         current_app.config.get("CLOUDINARY_URL")
@@ -23,13 +27,19 @@ def save_upload(file, folder="asm-agency/documents"):
 
     if cloudinary_enabled():
         import cloudinary.uploader
+        from cloudinary.exceptions import Error as CloudinaryError
 
-        result = cloudinary.uploader.upload(
-            file,
-            folder=folder,
-            public_id=stored_name.rsplit(".", 1)[0],
-            resource_type="auto",
-        )
+        try:
+            result = cloudinary.uploader.upload(
+                file,
+                folder=folder,
+                public_id=stored_name.rsplit(".", 1)[0],
+                resource_type="auto",
+            )
+        except CloudinaryError as exc:
+            raise UploadStorageError(
+                "Cloudinary rejected this upload. Enable the API key's upload/create permission."
+            ) from exc
         return stored_name, result["secure_url"], result.get("bytes")
 
     upload_dir = current_app.config["UPLOAD_FOLDER"]
