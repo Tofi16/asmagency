@@ -54,9 +54,8 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
-    UPLOAD_FOLDER = os.environ.get(
-        "UPLOAD_FOLDER", os.path.join(tempfile.gettempdir(), "asm-agency-uploads")
-    )
+    # Vercel's deployed filesystem is read-only; only /tmp is writable.
+    UPLOAD_FOLDER = os.path.join(tempfile.gettempdir(), "asm-agency-uploads")
     raw_database_url = (
         os.environ.get("DATABASE_URL")
         or os.environ.get("POSTGRES_PRISMA_URL")
