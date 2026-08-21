@@ -7,7 +7,7 @@ class RegisterForm(FlaskForm):
     full_name = StringField("ሙሉ ስም / Full name", validators=[DataRequired(), Length(min=3, max=150)])
     username = StringField(
         "የተጠቃሚ ስም / Username",
-        validators=[DataRequired(), Length(min=3, max=50), Regexp(r"^[a-zA-Z0-9_.]+$", message="ፊደላት፣ ቁጥሮች፣ _ እና . ብቻ / Letters, numbers, _ and . only")],
+        validators=[Optional(), Length(min=3, max=50), Regexp(r"^[a-zA-Z0-9_.]+$", message="ፊደላት፣ ቁጥሮች፣ _ እና . ብቻ / Letters, numbers, _ and . only")],
     )
     email = StringField("ኢሜይል / Email", validators=[DataRequired(), Email()])
     phone = StringField(
@@ -23,11 +23,20 @@ class RegisterForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
-    # Accepts either a username or an email in the same field — see auth/routes.py::login()
-    identifier = StringField("የተጠቃሚ ስም ወይም ኢሜይል / Username or Email", validators=[DataRequired()])
+    # Accept either the current identifier field or the legacy email field.
+    identifier = StringField("የተጠቃሚ ስም ወይም ኢሜይል / Username or Email", validators=[Optional()])
+    email = StringField("ኢሜይል / Email", validators=[Optional(), Email()])
     password = PasswordField("የይለፍ ቃል / Password", validators=[DataRequired()])
     remember = BooleanField("አስታውሰኝ / Remember me")
     submit = SubmitField("ግባ / Log in")
+
+    def validate(self, extra_validators=None):
+        if not super().validate(extra_validators=extra_validators):
+            return False
+        if not (self.identifier.data or self.email.data):
+            self.identifier.errors.append("የተጠቃሚ ስም ወይም ኢሜይል ያስገቡ / Enter your username or email.")
+            return False
+        return True
 
 
 class ForgotPasswordForm(FlaskForm):

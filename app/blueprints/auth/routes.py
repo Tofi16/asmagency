@@ -21,6 +21,16 @@ def _post_login_redirect(user):
     return url_for("admin.dashboard") if user.is_admin() else url_for("applicant.dashboard")
 
 
+def _unique_username(value):
+    base = (value or "").strip().lower()
+    candidate = base
+    counter = 1
+    while candidate and User.query.filter_by(username=candidate).first():
+        candidate = f"{base}{counter}"
+        counter += 1
+    return candidate
+
+
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
@@ -29,13 +39,10 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         email = form.email.data.lower().strip()
-        username = form.username.data.strip().lower()
+        username = _unique_username(form.username.data or email.split("@", 1)[0])
 
         if User.query.filter_by(email=email).first():
             flash("ይህ ኢሜይል ቀድሞውኑ ተመዝግቧል። / This email is already registered.", "danger")
-            return render_template("auth/register.html", form=form)
-        if User.query.filter_by(username=username).first():
-            flash("ይህ የተጠቃሚ ስም ተይዟል፣ ሌላ ይሞክሩ። / This username is taken — please try another.", "danger")
             return render_template("auth/register.html", form=form)
         if User.query.filter_by(phone=form.phone.data).first():
             flash("ይህ ስልክ ቁጥር ቀድሞውኑ ተመዝግቧል። / This phone number is already registered.", "danger")
@@ -74,7 +81,7 @@ def login():
 
     form = LoginForm()
     if form.validate_on_submit():
-        identifier = form.identifier.data.strip().lower()
+        identifier = (form.identifier.data or form.email.data).strip().lower()
         # Accept either a username or an email in the same field.
         user = User.query.filter(
             (User.username == identifier) | (User.email == identifier)
@@ -90,7 +97,7 @@ def login():
             next_page = request.args.get("next")
             return redirect(next_page or _post_login_redirect(user))
 
-        flash("የተሳሳተ የተጠቃሚ ስም/ኢሜይል ወይም የይለፍ ቃል። / Incorrect username/email or password.", "danger")
+        flash("የተሳሳተ ኢሜይል/የተጠቃሚ ስም ወይም የይለፍ ቃል። / Incorrect email or password.", "danger")
 
     return render_template("auth/login.html", form=form)
 
