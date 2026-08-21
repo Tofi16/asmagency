@@ -25,6 +25,7 @@ from app.models.review import Review
 from app.utils.decorators import admin_required, permission_required, super_admin_required
 from app.utils.audit import log_action
 from app.utils.cv_docx import build_cv_docx
+from app.utils.storage import save_upload
 
 
 def _shift_month(dt, n):
@@ -275,11 +276,7 @@ def _save_cv_photo(applicant, doc_type, file):
     if ext not in Document.ALLOWED_EXTENSIONS:
         return None, "የማይፈቀድ የፋይል አይነት (jpg, png, pdf ብቻ)። / File type not allowed (jpg, png, pdf only)."
 
-    stored_name = f"{uuid.uuid4().hex}.{ext}"
-    upload_dir = current_app.config["UPLOAD_FOLDER"]
-    os.makedirs(upload_dir, exist_ok=True)
-    file_path = os.path.join(upload_dir, stored_name)
-    file.save(file_path)
+    stored_name, file_path, file_size = save_upload(file, folder="asm-agency/cv")
 
     # Replace the existing photo of this type in place — a CV should show
     # only its current photo, not pile up old ones every time it's edited.
@@ -298,7 +295,7 @@ def _save_cv_photo(applicant, doc_type, file):
     doc.original_filename = secure_filename(file.filename)
     doc.stored_filename = stored_name
     doc.file_path = file_path
-    doc.file_size = os.path.getsize(file_path)
+    doc.file_size = file_size
     doc.status = "verified"
     doc.reviewed_by = current_user.id
     doc.reviewed_at = datetime.utcnow()

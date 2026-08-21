@@ -3,6 +3,7 @@ from flask import Flask, render_template, session
 
 from config import config_by_name
 from app.extensions import db, migrate, login_manager, csrf, bcrypt, cache, limiter
+from app.utils.storage import document_url
 
 
 def create_app(config_name=None):
@@ -12,6 +13,20 @@ def create_app(config_name=None):
         config_name = "production"
     app = Flask(__name__)
     app.config.from_object(config_by_name[config_name])
+
+    if app.config["CLOUDINARY_URL"] or all(
+        app.config.get(key)
+        for key in ("CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY", "CLOUDINARY_API_SECRET")
+    ):
+        import cloudinary
+
+        cloudinary.config(
+            cloudinary_url=app.config["CLOUDINARY_URL"] or None,
+            cloud_name=app.config["CLOUDINARY_CLOUD_NAME"] or None,
+            api_key=app.config["CLOUDINARY_API_KEY"] or None,
+            api_secret=app.config["CLOUDINARY_API_SECRET"] or None,
+            secure=True,
+        )
 
     if hasattr(config_by_name[config_name], "init_app"):
         config_by_name[config_name].init_app(app)
@@ -69,6 +84,7 @@ def create_app(config_name=None):
 
         return {
             "t": t,
+            "document_url": document_url,
             "current_lang": session.get("lang", "am"),
             "company_name": app.config["COMPANY_NAME"],
             "company_phone": app.config["COMPANY_PHONE"],

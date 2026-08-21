@@ -176,7 +176,7 @@
     <div class="doc-head">
       <div class="doc-head__portrait">
         {% if portrait_doc %}
-          <img src="{{ url_for('static', filename='uploads/' ~ portrait_doc.stored_filename) }}" alt="Portrait photo">
+          <img src="{{ document_url(portrait_doc) }}" alt="Portrait photo">
         {% else %}
           <div class="photo-placeholder">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
@@ -225,7 +225,7 @@
       <div class="photo-block photo-block--full">
         <div class="showcase-box showcase-box--full">
           {% if full_doc %}
-            <img src="{{ url_for('static', filename='uploads/' ~ full_doc.stored_filename) }}" alt="Full-Length Photo">
+            <img src="{{ document_url(full_doc) }}" alt="Full-Length Photo">
             <div class="verified-ribbon">VERIFIED</div>
           {% else %}
             <div class="photo-placeholder">
@@ -310,7 +310,7 @@
       <div class="showcase-box showcase-box--passport">
         {% if passport_doc %}
           {% if passport_doc.stored_filename.lower().endswith(('.jpg', '.jpeg', '.png')) %}
-            <img src="{{ url_for('static', filename='uploads/' ~ passport_doc.stored_filename) }}" alt="Passport Copy">
+            <img src="{{ document_url(passport_doc) }}" alt="Passport Copy">
             <div class="verified-ribbon">VERIFIED</div>
           {% else %}
             <div class="photo-placeholder">

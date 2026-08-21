@@ -31,6 +31,11 @@ class Config:
     CACHE_TYPE = os.environ.get("CACHE_TYPE") or "SimpleCache"
     CACHE_DEFAULT_TIMEOUT = 300
 
+    CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL") or ""
+    CLOUDINARY_CLOUD_NAME = os.environ.get("CLOUDINARY_CLOUD_NAME") or ""
+    CLOUDINARY_API_KEY = os.environ.get("CLOUDINARY_API_KEY") or ""
+    CLOUDINARY_API_SECRET = os.environ.get("CLOUDINARY_API_SECRET") or ""
+
     # --- Company info (used across templates) ---
     COMPANY_NAME = "ASM Foreign Employment Agency"
     COMPANY_PHONE = "+251979104070"

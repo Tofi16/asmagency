@@ -1,5 +1,3 @@
-import os
-import uuid
 from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
@@ -9,6 +7,7 @@ from app.extensions import db
 from app.models.document import Document
 from app.models.application import Application
 from app.utils.decorators import applicant_required
+from app.utils.storage import save_upload
 
 
 @applicant_bp.route("/dashboard")
@@ -76,11 +75,7 @@ def uploads():
             flash("የማይፈቀድ የፋይል አይነት (pdf, jpg, png ብቻ)። / File type not allowed (pdf, jpg, png only).", "danger")
             return redirect(url_for("applicant.uploads"))
 
-        stored_name = f"{uuid.uuid4().hex}.{ext}"
-        upload_dir = current_app.config["UPLOAD_FOLDER"]
-        os.makedirs(upload_dir, exist_ok=True)
-        file_path = os.path.join(upload_dir, stored_name)
-        file.save(file_path)
+        stored_name, file_path, file_size = save_upload(file)
 
         doc = Document(
             applicant_id=applicant.id,
@@ -88,7 +83,7 @@ def uploads():
             original_filename=secure_filename(file.filename),
             stored_filename=stored_name,
             file_path=file_path,
-            file_size=os.path.getsize(file_path),
+            file_size=file_size,
         )
         db.session.add(doc)
         db.session.commit()
