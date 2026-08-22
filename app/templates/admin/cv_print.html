@@ -22,6 +22,7 @@
   .sheet__inner{padding:26px 32px;position:relative;font-size:12.5px}
   .watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.04;pointer-events:none}
   .watermark img{width:55%}
+  .page-one{position:relative;display:flex;flex-direction:column}
 
   .doc-head{position:relative;display:flex;align-items:center;gap:18px;padding-bottom:18px;border-bottom:2px solid var(--line);margin-bottom:18px;background:linear-gradient(135deg,rgba(37,170,226,.05),rgba(244,183,64,.05));border-radius:10px;padding:14px 16px}
   .doc-head__portrait{width:104px;height:104px;border-radius:50%;overflow:hidden;border:4px solid var(--pro-blue);flex-shrink:0;background:#fff;box-shadow:0 10px 24px -6px rgba(37,170,226,.5)}
@@ -121,6 +122,7 @@
     .sheet{box-shadow:none;border-radius:0;max-width:none}
     .sheet__inner{padding:6mm 10mm;font-size:10.5px}
     @page{size:A4 portrait;margin:0}
+    .page-one{min-height:282mm}
     .accent-bar{height:3px}
     .doc-head{gap:12px;padding:8px 12px;margin-bottom:8px;border-radius:7px}
     .doc-head__portrait{width:72px;height:72px;border-width:3px}
@@ -171,6 +173,7 @@
 <div class="sheet">
   <div class="accent-bar"></div>
   <div class="sheet__inner">
+    <div class="page-one">
     <div class="watermark"><img src="{{ url_for('static', filename='img/logo.png') }}" alt=""></div>
 
     <div class="doc-head">
@@ -304,6 +307,7 @@
         {{ t('ያረጋግጡ','Verify') }}: {{ verify_url.replace('https://','').replace('http://','') }}<br>
         Application No. {{ profile.application_no }}
       </div>
+    </div>
     </div>
 
     <div class="photo-block photo-block--passport passport-page">
