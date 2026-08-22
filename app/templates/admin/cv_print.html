@@ -5,31 +5,331 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CV — {{ applicant.full_name }} — {{ company_name }}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#e92227;--blue:#25aae2;--navy:#1a1a2e;--line:#dfe3ea;--muted:#5b6172;--soft:#f7f9fb;--green:#1e8a5f;--amber:#c88a1e;--gold:#f4b740}
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,sans-serif;background:#e7eaef;color:var(--navy);padding:24px 14px;font-size:12px}.toolbar{max-width:900px;margin:0 auto 12px;display:flex;justify-content:flex-end;gap:8px}.toolbar button{font:700 13px Inter;padding:9px 16px;border:1px solid var(--line);border-radius:7px;background:#fff;cursor:pointer}.toolbar .primary{color:#fff;background:linear-gradient(135deg,var(--blue),#1a86b8);border:0}.sheet{max-width:900px;margin:auto;background:#fff;box-shadow:0 18px 45px #1a1a2e26;border-radius:6px;overflow:hidden}.accent-bar{height:5px;background:linear-gradient(90deg,var(--blue),var(--gold),var(--red))}.sheet__inner{padding:22px 28px 18px;position:relative}.page-one{position:relative;display:flex;flex-direction:column;min-height:276mm}.watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.035;pointer-events:none}.watermark img{width:52%}
-.masthead{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;padding-bottom:10px;border-bottom:2px solid var(--navy);margin-bottom:10px}.masthead__brand{display:flex;align-items:center;gap:9px}.masthead__brand img{height:42px;width:auto}.masthead__brand-text strong{display:block;font-family:Poppins;font-size:12px}.masthead__brand-text span{display:block;color:var(--muted);font-size:8px;text-transform:uppercase;font-weight:700}.masthead__title{text-align:center}.masthead__title h1{font:800 18px Poppins;letter-spacing:.04em}.masthead__title p{font-size:10px;color:var(--muted);direction:rtl}.masthead__meta{text-align:right;color:var(--muted);font-size:9px}.masthead__meta strong{display:block;color:var(--navy);font:800 13px Poppins}
-.nameplate{background:linear-gradient(120deg,#25aae20f,#f4b74017);border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:8px;padding:10px 15px;margin-bottom:10px}.nameplate__row{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}.nameplate__en{font:800 20px Poppins}.nameplate__ar{font-size:10px;color:var(--muted);direction:rtl}.nameplate__chips{display:flex;gap:5px;flex-wrap:wrap}.chip{background:#fff;border:1px solid #cdeaf7;border-radius:999px;color:#1a86b8;font-size:9px;font-weight:700;padding:3px 9px;white-space:nowrap}.nameplate__facts{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line)}.nameplate__fact-label{font-size:7.5px;color:var(--muted);font-weight:700;text-transform:uppercase}.nameplate__fact-value{font:800 12px Poppins;margin-top:1px}.partner-note{background:var(--soft);border:1px dashed var(--blue);border-radius:6px;padding:5px 10px;font-size:9px;margin-bottom:10px}
-.cv-body{display:grid;grid-template-columns:165px 1fr;gap:16px;flex:1}.sidebar{display:flex;flex-direction:column;gap:7px}.id-photo,.showcase-box{border:3px solid var(--blue);border-radius:10px;background:#fff;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 7px 18px -6px #25aae266}.id-photo{aspect-ratio:1}.id-photo img,.showcase-box img{width:100%;height:100%;object-fit:cover}.showcase-box{flex:1;min-height:145px}.photo-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#b7bcc8;padding:7px;text-align:center;font-size:8px;font-weight:700}.photo-placeholder svg{width:27px;height:27px}.showcase-label{text-align:center;font:800 8px Poppins;text-transform:uppercase}.showcase-label .ar{display:block;font:600 7.5px Inter;color:var(--muted);direction:rtl}.verified-ribbon{position:absolute;top:7px;right:-27px;transform:rotate(35deg);background:var(--gold);padding:2px 27px;font-size:6px;font-weight:800}.main-col{display:flex;flex-direction:column}.section-block{margin-bottom:8px}.section-title{display:flex;align-items:center;gap:6px;background:linear-gradient(90deg,var(--navy),#2a2b45);border-left:4px solid var(--gold);border-radius:5px;color:#fff;padding:5px 9px;margin-bottom:5px;font-size:9px;font-weight:700;text-transform:uppercase}.section-title svg{width:11px;height:11px}.section-title .en{flex:1}.section-title .ar{font-size:8px;direction:rtl;opacity:.85}.fact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.fact-grid--2{grid-template-columns:repeat(2,1fr)}.fact{background:var(--soft);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:6px;padding:5px 7px}.fact--wide{grid-column:1/-1}.fact__label{display:flex;justify-content:space-between;color:var(--muted);font-size:7px;font-weight:700;text-transform:uppercase}.fact__label .ar{direction:rtl}.fact__value{font:800 10px Poppins;margin-top:1px}.prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 14px}.prof-row{display:flex;align-items:center;gap:6px;margin-bottom:3px}.prof-row__label{width:95px;font-size:8.5px;font-weight:700;flex-shrink:0}.prof-row__track{flex:1;height:6px;background:var(--soft);border:1px solid var(--line);border-radius:8px;overflow:hidden}.prof-row__fill{height:100%;border-radius:8px}.lvl-none,.lvl-poor{background:var(--red)}.lvl-fair{background:var(--amber)}.lvl-good{background:var(--blue)}.lvl-fluent,.lvl-excellent{background:var(--green)}.prof-row__val{width:38px;text-align:right;color:var(--muted);font-size:7.5px;text-transform:capitalize}
-table.hist-tbl{width:100%;border-collapse:collapse;font-size:8.5px}table.hist-tbl th,table.hist-tbl td{border:1px solid var(--line);padding:3px 7px;text-align:left}table.hist-tbl th{background:var(--soft);font-size:7.5px}.doc-footer{margin-top:auto;padding-top:7px;border-top:2px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;color:var(--muted);font-size:7.5px;gap:10px}.doc-footer strong{color:var(--navy)}.stamp-circle{width:38px;height:38px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;font:800 6px Poppins;color:var(--navy);background:#fffbeF}.passport-page{margin-top:16px}.passport-page .showcase-box{height:270mm;min-height:0}
-+@media screen and (max-width:760px){body{padding:9px 6px}.toolbar{flex-direction:column}.toolbar button{width:100%}.sheet__inner{padding:15px 12px}.masthead{grid-template-columns:1fr;text-align:center}.masthead__brand{justify-content:center}.masthead__meta{text-align:center}.nameplate__row{justify-content:center;text-align:center}.nameplate__facts{grid-template-columns:1fr 1fr}.cv-body{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:120px 1fr;gap:7px}.id-photo{width:120px;height:120px}.showcase-box{min-height:180px}.sidebar .showcase-label{grid-column:2}.fact-grid,.prof-grid{grid-template-columns:1fr 1fr}.doc-footer{flex-direction:column;align-items:center;text-align:center}.doc-footer>div:last-child{text-align:center}}
-+@media print{body{background:#fff;padding:0;font-size:9.8px}.toolbar{display:none}.sheet{max-width:none;box-shadow:none;border-radius:0}.sheet__inner{padding:7mm 11mm 6mm}.page-one{min-height:282mm}.accent-bar{height:3px}.masthead{gap:10px;padding-bottom:8px;margin-bottom:8px}.masthead__brand img{height:34px}.masthead__brand-text strong{font-size:11px}.masthead__brand-text span{font-size:7px}.masthead__title h1{font-size:16px}.masthead__title p{font-size:9px}.masthead__meta{font-size:8px}.masthead__meta strong{font-size:11px}.nameplate{padding:8px 12px;margin-bottom:7px}.nameplate__en{font-size:17px}.nameplate__ar{font-size:8px}.chip{font-size:7.5px;padding:2px 7px}.nameplate__facts{gap:5px;margin-top:6px;padding-top:6px}.nameplate__fact-label{font-size:6.5px}.nameplate__fact-value{font-size:9.5px}.partner-note{padding:3px 8px;font-size:7.5px;margin-bottom:6px}.cv-body{gap:10px}.sidebar{gap:5px}.id-photo{border-width:2px}.showcase-box{border-width:2px;min-height:0}.section-block{margin-bottom:5px}.section-title{padding:3px 7px;font-size:7.8px;margin-bottom:3px}.section-title svg{width:9px;height:9px}.section-title .ar{font-size:7px}.fact-grid{gap:4px}.fact{padding:3px 5px}.fact__label{font-size:6px}.fact__value{font-size:8.5px}.prof-row{margin-bottom:2px}.prof-row__label{width:82px;font-size:7.5px}.prof-row__track{height:5px}.prof-row__val{width:34px;font-size:7px}.doc-footer{font-size:6.8px;padding-top:5px}.stamp-circle{width:32px;height:32px;font-size:5px}.masthead,.nameplate,.partner-note,.fact-grid,.fact,.section-title,.doc-footer,.showcase-box,.id-photo,table.hist-tbl,table.hist-tbl tr{break-inside:avoid;page-break-inside:avoid}.section-title{break-after:avoid;page-break-after:avoid}.passport-page{break-before:page;page-break-before:always;margin-top:0}.passport-page .showcase-box{height:275mm}}
-+</style>
-+</head>
-+<body>
-+<div class="toolbar"><button class="primary" onclick="window.print()">🖨️ {{ t('አትም / PDF አውርድ','Print / Download PDF') }}</button><button onclick="window.close()">✕ {{ t('ዝጋ','Close') }}</button></div>
-+<div class="sheet"><div class="accent-bar"></div><div class="sheet__inner"><div class="page-one"><div class="watermark"><img src="{{ url_for('static', filename='img/logo.png') }}" alt=""></div>
-+<div class="masthead"><div class="masthead__brand"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="{{ company_name }} logo"><div class="masthead__brand-text"><strong>{{ company_name }}</strong><span>Overseas Recruitment</span></div></div><div class="masthead__title"><h1>JOB APPLICATION — CV</h1><p>طلب توظيف — السيرة الذاتية</p></div><div class="masthead__meta"><strong>#{{ profile.application_no }}</strong>{{ profile.updated_at.strftime('%d %b %Y') if profile.updated_at else '' }}</div></div>
-+<div class="nameplate"><div class="nameplate__row"><div><div class="nameplate__en">{{ applicant.full_name.upper() }}</div><div class="nameplate__ar">الاسم الكامل</div></div><div class="nameplate__chips"><span class="chip">🇪🇹 Ethiopian</span>{% if applicant.date_of_birth %}<span class="chip">{{ profile.age() }} yrs old</span>{% endif %}{% if profile.marital_status %}<span class="chip">{{ profile.marital_status|capitalize }}</span>{% endif %}</div></div><div class="nameplate__facts"><div><div class="nameplate__fact-label">Post Applied For</div><div class="nameplate__fact-value">{{ profile.post_applied_for or '—' }}</div></div><div><div class="nameplate__fact-label">Monthly Salary</div><div class="nameplate__fact-value">{{ '%s %s'|format(profile.monthly_salary, profile.salary_currency) if profile.monthly_salary else '—' }}</div></div><div><div class="nameplate__fact-label">Contract Period</div><div class="nameplate__fact-value">{{ profile.contract_period_years ~ ' yrs' if profile.contract_period_years else '—' }}</div></div><div><div class="nameplate__fact-label">Application No</div><div class="nameplate__fact-value">#{{ profile.application_no }}</div></div></div></div>
-+{% if profile.partner %}<div class="partner-note">🤝 Presented in partnership with: <strong>{{ profile.partner.name }}</strong> — {{ profile.partner.country }}</div>{% endif %}
-+<div class="cv-body"><div class="sidebar"><div class="id-photo">{% if portrait_doc and document_url(portrait_doc) %}<img src="{{ document_url(portrait_doc) }}" alt="Portrait photo">{% else %}<div class="photo-placeholder"><span>ID Photo pending</span></div>{% endif %}</div><div class="showcase-box">{% if full_doc and document_url(full_doc) %}<img src="{{ document_url(full_doc) }}" alt="Full-Length Photo"><div class="verified-ribbon">VERIFIED</div>{% else %}<div class="photo-placeholder"><span>Full-length photo pending</span></div>{% endif %}</div><div class="showcase-label">Full-Length Photo<span class="ar">صورة كاملة</span></div></div>
-+<div class="main-col"><div class="section-block"><div class="section-title"><span class="en">Personal Information</span><span class="ar">المعلومات الشخصية</span></div><div class="fact-grid"><div class="fact"><div class="fact__label"><span>Gender</span><span class="ar">الجنس</span></div><div class="fact__value">{{ applicant.gender|capitalize if applicant.gender else '—' }}</div></div><div class="fact"><div class="fact__label"><span>Date of Birth</span><span class="ar">تاريخ الميلاد</span></div><div class="fact__value">{{ applicant.date_of_birth.strftime('%d %m %Y') if applicant.date_of_birth else '—' }}</div></div><div class="fact"><div class="fact__label"><span>Place of Birth</span><span class="ar">مكان الميلاد</span></div><div class="fact__value">{{ profile.place_of_birth or '—' }}</div></div><div class="fact"><div class="fact__label"><span>Religion</span><span class="ar">الديانة</span></div><div class="fact__value">{{ profile.religion or '—' }}</div></div><div class="fact"><div class="fact__label"><span>Weight / Height</span><span class="ar">الوزن / الطول</span></div><div class="fact__value">{{ (profile.weight_kg ~ ' kg') if profile.weight_kg else '—' }} / {{ (profile.height_m ~ ' m') if profile.height_m else '—' }}</div></div><div class="fact"><div class="fact__label"><span>Education</span><span class="ar">المؤهل العلمي</span></div><div class="fact__value">{{ applicant.education_level or '—' }}</div></div></div></div>
-+<div class="section-block"><div class="section-title"><span class="en">Passport Details</span><span class="ar">بيانات جواز السفر</span></div><div class="fact-grid fact-grid--2"><div class="fact"><div class="fact__label"><span>Passport Number</span></div><div class="fact__value">{{ applicant.passport_number or '—' }}</div></div><div class="fact"><div class="fact__label"><span>Issue Place</span></div><div class="fact__value">{{ profile.passport_issue_place or '—' }}</div></div><div class="fact"><div class="fact__label"><span>Issue Date</span></div><div class="fact__value">{{ profile.passport_issue_date.strftime('%d/%m/%Y') if profile.passport_issue_date else '—' }}</div></div><div class="fact"><div class="fact__label"><span>Expiry Date</span></div><div class="fact__value">{{ profile.passport_expiry_date.strftime('%d/%m/%Y') if profile.passport_expiry_date else '—' }}</div></div></div></div>
-+<div class="section-block"><div class="section-title"><span class="en">Languages</span><span class="ar">اللغات</span></div>{% set lang_pct={'none':10,'fair':40,'good':70,'fluent':100} %}{% set lang_map={} %}{% for l in profile.languages %}{% set _=lang_map.update({l.language:l.level}) %}{% endfor %}<div class="prof-grid">{% for lang in ['Arabic','English'] %}{% set lvl=lang_map.get(lang,'none') %}<div class="prof-row"><div class="prof-row__label">{{ lang }}</div><div class="prof-row__track"><div class="prof-row__fill lvl-{{ lvl }}" style="width:{{ lang_pct.get(lvl,10) }}%"></div></div><div class="prof-row__val">{{ lvl }}</div></div>{% endfor %}</div></div>
-+<div class="section-block"><div class="section-title"><span class="en">Skills</span><span class="ar">المهارات</span></div>{% set skill_pct={'poor':25,'fair':50,'good':75,'excellent':100} %}{% set skill_map={} %}{% for s in profile.skills %}{% set _=skill_map.update({s.skill:s.level}) %}{% endfor %}<div class="prof-grid">{% for skill in ['Care of the Elderly','Baby Sitting','Cleaning','Washing','Cooking'] %}{% set lvl=skill_map.get(skill,'good') %}<div class="prof-row"><div class="prof-row__label">{{ skill }}</div><div class="prof-row__track"><div class="prof-row__fill lvl-{{ lvl }}" style="width:{{ skill_pct.get(lvl,75) }}%"></div></div><div class="prof-row__val">{{ lvl }}</div></div>{% endfor %}</div></div>
-+{% if profile.work_history %}<div class="section-block"><div class="section-title"><span class="en">Work Experience</span><span class="ar">الخبرة</span></div><table class="hist-tbl"><thead><tr><th>Period</th><th>Country</th></tr></thead><tbody>{% for h in profile.work_history %}<tr><td>{{ h.period }}</td><td>{{ h.country }}</td></tr>{% endfor %}</tbody></table></div>{% endif %}
-+<div class="section-block"><div class="section-title"><span class="en">Emergency Contact</span><span class="ar">معلومات الطوارئ</span></div><div class="fact-grid fact-grid--2"><div class="fact"><div class="fact__label">Full Name</div><div class="fact__value">{{ profile.emergency_contact_name or '—' }}</div></div><div class="fact"><div class="fact__label">Phone</div><div class="fact__value">{{ profile.emergency_contact_phone or '—' }}</div></div><div class="fact fact--wide"><div class="fact__label">Address</div><div class="fact__value">{{ profile.emergency_contact_address or '—' }}</div></div></div></div>
-+<div class="doc-footer"><div><strong>{{ company_name }}</strong><br>📞 {{ company_phone }} · ✉️ {{ company_email }}<br>📍 {{ company_address_en }}</div><div class="stamp-circle">ASM<br>VERIFIED</div><div style="text-align:right">Generated {{ profile.updated_at.strftime('%Y-%m-%d') }}<br>{{ t('ያረጋግጡ','Verify') }}: {{ verify_url.replace('https://','').replace('http://','') }}<br>Application No. {{ profile.application_no }}</div></div></div></div>
-+<div class="passport-page"><div class="showcase-box">{% if passport_doc and document_url(passport_doc) and passport_doc.stored_filename.lower().endswith(('.jpg','.jpeg','.png')) %}<img src="{{ document_url(passport_doc) }}" alt="Passport Copy"><div class="verified-ribbon">VERIFIED</div>{% else %}<div class="photo-placeholder"><span>Passport copy pending</span></div>{% endif %}</div><div class="showcase-label" style="margin-top:6px">Passport Copy<span class="ar">نسخة جواز السفر</span></div></div>
-+</div></div></body></html>
+  :root{
+    --trust-red:#E92227; --pro-blue:#25AAE2; --pro-blue-dark:#1a86b8; --authority:#1A1A2E;
+    --line:#dfe3ea; --ink-muted:#5B6172; --canvas:#F7F9FB; --success:#1E8A5F; --amber:#C88A1E; --gold:#F4B740;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',sans-serif;background:#e7eaef;color:var(--authority);padding:28px 16px}
+  .toolbar{max-width:820px;margin:0 auto 14px;display:flex;justify-content:flex-end;gap:10px}
+  .toolbar button{font-family:inherit;font-weight:700;font-size:13.5px;padding:10px 18px;border-radius:9px;border:1.5px solid var(--line);background:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+  .toolbar button.primary{background:linear-gradient(135deg,var(--pro-blue),var(--pro-blue-dark));color:#fff;border:none}
+
+  .sheet{max-width:820px;margin:0 auto;background:#fff;box-shadow:0 20px 50px -16px rgba(26,26,46,.22);border-radius:6px;overflow:hidden}
+  .accent-bar{height:5px;background:linear-gradient(90deg,var(--pro-blue),var(--trust-red))}
+  .sheet__inner{padding:26px 32px;position:relative;font-size:12.5px}
+  .watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.04;pointer-events:none}
+  .watermark img{width:55%}
+
+  .doc-head{position:relative;display:flex;align-items:center;gap:18px;padding-bottom:18px;border-bottom:2px solid var(--line);margin-bottom:18px;background:linear-gradient(135deg,rgba(37,170,226,.05),rgba(244,183,64,.05));border-radius:10px;padding:14px 16px}
+  .doc-head__portrait{width:104px;height:104px;border-radius:50%;overflow:hidden;border:4px solid var(--pro-blue);flex-shrink:0;background:#fff;box-shadow:0 10px 24px -6px rgba(37,170,226,.5)}
+  .doc-head__portrait img{width:100%;height:100%;object-fit:cover}
+  .doc-head__portrait .photo-placeholder svg{width:36px;height:36px}
+  .doc-head__portrait .photo-placeholder span{display:none}
+  .doc-head__title{text-align:center;flex:1}
+  .doc-head__title h1{font-family:'Poppins';font-size:21px;font-weight:800;letter-spacing:.03em;color:var(--authority)}
+  .doc-head__title p{font-size:11.5px;color:var(--ink-muted);margin-top:3px;direction:rtl}
+  .doc-head__logo img{height:52px;width:auto;flex-shrink:0}
+
+  .info-chips{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+  .info-chip{background:var(--canvas);border:1px solid var(--line);border-left:3px solid var(--pro-blue);border-radius:7px;padding:7px 10px}
+  .info-chip__label{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-muted);margin-bottom:2px}
+  .info-chip__value{font-family:'Poppins';font-size:13px;font-weight:800;color:var(--authority)}
+
+  .partner-note{position:relative;background:var(--canvas);border:1px dashed var(--pro-blue);border-radius:7px;padding:7px 12px;font-size:10.5px;margin-bottom:14px;color:var(--authority)}
+
+  .name-block{margin-bottom:10px;text-align:center}
+  .name-block .en{font-family:'Poppins';font-weight:800;font-size:18px;color:var(--authority);letter-spacing:-.01em}
+  .name-block .ar{font-size:10.5px;color:var(--ink-muted);direction:rtl;margin-top:2px}
+  .name-block__chips{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;justify-content:center}
+  .name-chip{background:#E8F7FD;color:var(--pro-blue-dark);font-size:10px;font-weight:700;padding:3px 10px;border-radius:999px;border:1px solid #cdeaf7}
+
+  /* Compact profile layout: details beside the full-length photo. */
+  .profile-row{display:grid;grid-template-columns:1fr 190px;gap:16px;align-items:start;margin-bottom:14px}
+  .photo-block{position:relative}
+  .showcase-box{border-radius:10px;border:3px solid var(--pro-blue);overflow:hidden;position:relative;box-shadow:0 8px 20px -6px rgba(37,170,226,.4);background:#fff;display:flex;align-items:center;justify-content:center}
+  .showcase-box--full{height:230px}
+  .showcase-box--passport{min-height:460px}
+  .showcase-box img{width:100%;height:100%;object-fit:contain;background:#fff}
+  .showcase-box .photo-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#b7bcc8}
+  .showcase-box .photo-placeholder svg{width:32px;height:32px;opacity:.55}
+  .showcase-box .photo-placeholder span{font-size:9px;font-weight:700;text-align:center;padding:0 8px}
+  .showcase-label{font-family:'Poppins';font-size:9.5px;font-weight:800;text-align:center;color:var(--authority);margin-top:6px;text-transform:uppercase;letter-spacing:.05em}
+  .showcase-label .ar{display:block;font-family:'Inter';font-weight:600;font-size:8.5px;color:var(--ink-muted);text-transform:none;direction:rtl;margin-top:1px}
+  .verified-ribbon{position:absolute;top:8px;right:-28px;background:linear-gradient(90deg,var(--gold),#e2a12a);color:var(--authority);font-size:7px;font-weight:800;padding:2px 28px;transform:rotate(35deg);box-shadow:0 3px 8px rgba(0,0,0,.25);letter-spacing:.05em}
+
+  .passport-page{margin-top:18px}
+
+  .section-title{position:relative;background:linear-gradient(90deg,var(--authority),#2a2b45);color:#fff;padding:7px 14px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:6px;margin:18px 0 9px;display:flex;justify-content:space-between;align-items:center;border-left:4px solid var(--gold)}
+  .section-title .ar{direction:rtl;font-weight:600;opacity:.85}
+
+  table.info-tbl{position:relative;width:100%;border-collapse:collapse;font-size:11.5px}
+  table.info-tbl td{padding:7px 10px;border:1px solid var(--line)}
+  table.info-tbl td.label-en{font-weight:700;background:var(--canvas);width:34%}
+  table.info-tbl td.label-ar{direction:rtl;text-align:right;color:var(--ink-muted);width:20%;background:var(--canvas);font-size:10.5px}
+  table.info-tbl td.value{width:46%}
+
+  .prof-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+  .prof-row__label{width:140px;font-size:11px;font-weight:700;flex-shrink:0}
+  .prof-row__track{flex:1;height:9px;background:var(--canvas);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+  .prof-row__fill{height:100%;border-radius:999px}
+  .prof-row__val{width:52px;text-align:right;font-size:10px;font-weight:700;color:var(--ink-muted);text-transform:capitalize}
+  .lvl-none,.lvl-poor{background:var(--trust-red)}
+  .lvl-fair{background:var(--amber)}
+  .lvl-good{background:var(--pro-blue)}
+  .lvl-fluent,.lvl-excellent{background:var(--success)}
+
+  table.hist-tbl{position:relative;width:100%;border-collapse:collapse;font-size:11px}
+  table.hist-tbl th{background:var(--canvas);padding:7px 10px;border:1px solid var(--line);text-align:left;font-size:9.5px;font-weight:700}
+  table.hist-tbl td{padding:7px 10px;border:1px solid var(--line)}
+
+  .emergency-tbl{position:relative;width:100%;border-collapse:collapse;font-size:11.5px}
+  .emergency-tbl td{padding:7px 10px;border:1px solid var(--line)}
+  .emergency-tbl td.label{font-weight:700;background:var(--canvas);width:20%}
+
+  .doc-footer{position:relative;margin-top:18px;padding-top:12px;border-top:2px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;font-size:9.5px;color:var(--ink-muted);gap:14px}
+  .doc-footer strong{color:var(--authority)}
+  .stamp{display:flex;flex-direction:column;align-items:center;gap:3px}
+  .stamp-circle{width:52px;height:52px;border-radius:50%;border:2.5px solid var(--gold);color:var(--authority);display:flex;align-items:center;justify-content:center;font-family:'Poppins';font-weight:800;font-size:7.5px;text-align:center;line-height:1.2;transform:rotate(-8deg);background:#FFFBEF;box-shadow:0 4px 10px -3px rgba(244,183,64,.5)}
+
+  /* ===== Mobile screen viewing (not print) ===== */
+  @media screen and (max-width:700px){
+    body{padding:12px 8px}
+    .toolbar{flex-direction:column;gap:8px}
+    .toolbar button{width:100%;justify-content:center}
+    .sheet__inner{padding:18px 16px}
+    .doc-head{flex-wrap:wrap;justify-content:center;text-align:center}
+    .doc-head__title{order:-1;width:100%}
+    .info-chips{grid-template-columns:1fr 1fr}
+    .profile-row{grid-template-columns:1fr}
+    .showcase-box--full{height:260px}
+    .showcase-box--passport{min-height:320px}
+    table.info-tbl td.label-ar{display:none}
+    table.info-tbl td.label-en{width:44%}
+    table.info-tbl td.value{width:56%}
+    .prof-row__label{width:100px;font-size:10px}
+    table.hist-tbl{font-size:10px}
+    .doc-footer{flex-direction:column;align-items:center;text-align:center;gap:12px}
+    .doc-footer > div:last-child{text-align:center}
+  }
+
+  @media print{
+    body{background:#fff;padding:0}
+    .toolbar{display:none}
+    .sheet{box-shadow:none;border-radius:0;max-width:none}
+    .sheet__inner{padding:6mm 10mm;font-size:10.5px}
+    @page{size:A4 portrait;margin:0}
+    .accent-bar{height:3px}
+    .doc-head{gap:12px;padding:8px 12px;margin-bottom:8px;border-radius:7px}
+    .doc-head__portrait{width:72px;height:72px;border-width:3px}
+    .doc-head__title h1{font-size:17px}
+    .doc-head__title p{font-size:9px}
+    .doc-head__logo img{height:38px}
+    .info-chips{gap:5px;margin-bottom:7px}
+    .info-chip{padding:4px 7px;border-radius:5px}
+    .info-chip__label{font-size:7px;margin-bottom:1px}
+    .info-chip__value{font-size:10.5px}
+    .partner-note{padding:4px 8px;font-size:8.5px;margin-bottom:7px}
+    .name-block{margin-bottom:6px}
+    .name-block .en{font-size:15px}
+    .name-block .ar{font-size:8.5px}
+    .name-block__chips{gap:4px;margin-top:4px}
+    .name-chip{font-size:8px;padding:2px 7px}
+    .profile-row{grid-template-columns:1fr 150px;gap:10px;margin-bottom:7px}
+    .showcase-box--full{height:150px}
+    .showcase-label{font-size:7.5px;margin-top:3px}
+    .showcase-label .ar{font-size:7px}
+    .section-title{padding:4px 8px;font-size:8.5px;margin:7px 0 4px;border-left-width:3px;border-radius:4px}
+    table.info-tbl{font-size:9px}
+    table.info-tbl td{padding:4px 6px}
+    table.info-tbl td.label-ar{font-size:8px}
+    .prof-row{gap:7px;margin-bottom:3px}
+    .prof-row__label{width:110px;font-size:8.5px}
+    .prof-row__track{height:6px}
+    .prof-row__val{width:38px;font-size:8px}
+    table.hist-tbl,.emergency-tbl{font-size:8.5px}
+    table.hist-tbl th,table.hist-tbl td,.emergency-tbl td{padding:4px 6px}
+    .doc-footer{margin-top:8px;padding-top:7px;font-size:7.5px;gap:8px}
+    .stamp-circle{width:38px;height:38px;font-size:6px}
+    .doc-head,.info-chips,.partner-note,.name-block,.profile-row,.photo-block,.showcase-box,
+    table.info-tbl,table.info-tbl tr,table.hist-tbl,table.hist-tbl tr,.emergency-tbl,
+    .emergency-tbl tr,.section-title,.doc-footer{break-inside:avoid;page-break-inside:avoid}
+    .section-title{break-after:avoid;page-break-after:avoid}
+    .passport-page{break-before:page;page-break-before:always}
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button onclick="window.print()" class="primary">🖨️ {{ t('አትም / PDF አውርድ','Print / Download PDF') }}</button>
+  <button onclick="window.close()">✕ {{ t('ዝጋ','Close') }}</button>
+</div>
+
+<div class="sheet">
+  <div class="accent-bar"></div>
+  <div class="sheet__inner">
+    <div class="watermark"><img src="{{ url_for('static', filename='img/logo.png') }}" alt=""></div>
+
+    <div class="doc-head">
+      <div class="doc-head__portrait">
+        {% if portrait_doc and document_url(portrait_doc) %}
+          <img src="{{ document_url(portrait_doc) }}" alt="Portrait photo">
+        {% else %}
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+          </div>
+        {% endif %}
+      </div>
+      <div class="doc-head__title">
+        <h1>JOB APPLICATION — CV</h1>
+        <p>طلب توظيف — السيرة الذاتية</p>
+      </div>
+      <div class="doc-head__logo"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="ASM logo"></div>
+    </div>
+
+    <div class="info-chips">
+      <div class="info-chip"><div class="info-chip__label">Application No</div><div class="info-chip__value">#{{ profile.application_no }}</div></div>
+      <div class="info-chip"><div class="info-chip__label">Post Applied For</div><div class="info-chip__value">{{ profile.post_applied_for or '—' }}</div></div>
+      <div class="info-chip"><div class="info-chip__label">Monthly Salary</div><div class="info-chip__value">{{ '%s %s'|format(profile.monthly_salary, profile.salary_currency) if profile.monthly_salary else '—' }}</div></div>
+      <div class="info-chip"><div class="info-chip__label">Contract Period</div><div class="info-chip__value">{{ profile.contract_period_years ~ ' yrs' if profile.contract_period_years else '—' }}</div></div>
+    </div>
+
+    {% if profile.partner %}
+    <div class="partner-note">🤝 {{ t('በአጋርነት ቀርቧል','Presented in partnership with') }}: <strong>{{ profile.partner.name }}</strong> — {{ profile.partner.country }}</div>
+    {% endif %}
+
+    <div class="name-block">
+      <div class="en">{{ applicant.full_name.upper() }}</div>
+      <div class="ar">الاسم الكامل</div>
+      <div class="name-block__chips">
+        <span class="name-chip">🇪🇹 Ethiopian</span>
+        {% if applicant.date_of_birth %}<span class="name-chip">{{ profile.age() }} yrs old</span>{% endif %}
+        {% if profile.marital_status %}<span class="name-chip">{{ profile.marital_status }}</span>{% endif %}
+      </div>
+    </div>
+
+    <div class="profile-row">
+      <div>
+        <div class="section-title"><span>Personal Information</span><span class="ar">المعلومات الشخصية</span></div>
+        <table class="info-tbl">
+          <tr><td class="label-en">Religion</td><td class="label-ar">الديانة</td><td class="value">{{ profile.religion or '—' }}</td></tr>
+          <tr><td class="label-en">Date of Birth</td><td class="label-ar">تاريخ الميلاد</td><td class="value">{{ applicant.date_of_birth.strftime('%d %m %Y') if applicant.date_of_birth else '—' }}</td></tr>
+          <tr><td class="label-en">Place of Birth</td><td class="label-ar">مكان الميلاد</td><td class="value">{{ profile.place_of_birth or '—' }}</td></tr>
+          <tr><td class="label-en">Weight / Height</td><td class="label-ar">الوزن / الطول</td><td class="value">{{ (profile.weight_kg ~ ' kg') if profile.weight_kg else '—' }} / {{ (profile.height_m ~ ' m') if profile.height_m else '—' }}</td></tr>
+          <tr><td class="label-en">Education</td><td class="label-ar">المؤهل العلمي</td><td class="value">{{ applicant.education_level or '—' }}</td></tr>
+        </table>
+      </div>
+      <div class="photo-block photo-block--full">
+        <div class="showcase-box showcase-box--full">
+          {% if full_doc and document_url(full_doc) %}
+            <img src="{{ document_url(full_doc) }}" alt="Full-Length Photo">
+            <div class="verified-ribbon">VERIFIED</div>
+          {% else %}
+            <div class="photo-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="2" width="12" height="20" rx="2"/></svg>
+              <span>Full-length photo pending</span>
+            </div>
+          {% endif %}
+        </div>
+        <div class="showcase-label">Full-Length Photo<span class="ar">صورة كاملة</span></div>
+      </div>
+    </div>
+
+    <div class="section-title"><span>Passport Details</span><span class="ar">بيانات جواز السفر</span></div>
+    <table class="info-tbl">
+      <tr><td class="label-en">Passport Number</td><td class="label-ar">رقم الجواز</td><td class="value">{{ applicant.passport_number or '—' }}</td></tr>
+      <tr><td class="label-en">Issue Place</td><td class="label-ar">مكان الاصدار</td><td class="value">{{ profile.passport_issue_place or '—' }}</td></tr>
+      <tr><td class="label-en">Issue Date</td><td class="label-ar">تاريخ الاصدار</td><td class="value">{{ profile.passport_issue_date.strftime('%d/%m/%Y') if profile.passport_issue_date else '—' }}</td></tr>
+      <tr><td class="label-en">Expiry Date</td><td class="label-ar">تاريخ الانتهاء</td><td class="value">{{ profile.passport_expiry_date.strftime('%d/%m/%Y') if profile.passport_expiry_date else '—' }}</td></tr>
+    </table>
+
+    <div class="section-title"><span>Languages</span><span class="ar">اللغات</span></div>
+    {% set lang_pct = {'none':10,'fair':40,'good':70,'fluent':100} %}
+    {% set lang_map = {} %}
+    {% for l in profile.languages %}{% set _ = lang_map.update({l.language: l.level}) %}{% endfor %}
+    {% for lang in ['Arabic','English'] %}
+    {% set lvl = lang_map.get(lang, 'none') %}
+    <div class="prof-row">
+      <div class="prof-row__label">{{ lang }}</div>
+      <div class="prof-row__track"><div class="prof-row__fill lvl-{{ lvl }}" style="width:{{ lang_pct[lvl] }}%"></div></div>
+      <div class="prof-row__val">{{ lvl }}</div>
+    </div>
+    {% endfor %}
+
+    <div class="section-title"><span>Skills</span><span class="ar">المهارات</span></div>
+    {% set skill_pct = {'poor':25,'fair':50,'good':75,'excellent':100} %}
+    {% set skill_map = {} %}
+    {% for s in profile.skills %}{% set _ = skill_map.update({s.skill: s.level}) %}{% endfor %}
+    {% for skill in ['Care of the Elderly','Baby Sitting','Cleaning','Washing','Cooking'] %}
+    {% set lvl = skill_map.get(skill, 'good') %}
+    <div class="prof-row">
+      <div class="prof-row__label">{{ skill }}</div>
+      <div class="prof-row__track"><div class="prof-row__fill lvl-{{ lvl }}" style="width:{{ skill_pct[lvl] }}%"></div></div>
+      <div class="prof-row__val">{{ lvl }}</div>
+    </div>
+    {% endfor %}
+
+    {% if profile.work_history %}
+    <div class="section-title"><span>Work Experience</span><span class="ar">الخبرة</span></div>
+    <table class="hist-tbl">
+      <thead><tr><th>Period</th><th>Country</th></tr></thead>
+      <tbody>
+        {% for h in profile.work_history %}
+        <tr><td>{{ h.period }}</td><td>{{ h.country }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+
+    <div class="section-title"><span>Emergency Contact</span><span class="ar">معلومات الطوارئ</span></div>
+    <table class="emergency-tbl">
+      <tr><td class="label">Full Name</td><td>{{ profile.emergency_contact_name or '—' }}</td><td class="label">Phone</td><td>{{ profile.emergency_contact_phone or '—' }}</td></tr>
+      <tr><td class="label">Address</td><td colspan="3">{{ profile.emergency_contact_address or '—' }}</td></tr>
+    </table>
+
+    <div class="doc-footer">
+      <div>
+        <strong>{{ company_name }}</strong><br>
+        📞 {{ company_phone }} &nbsp;·&nbsp; ✉️ {{ company_email }}<br>
+        📍 {{ company_address_en }}
+      </div>
+      <div class="stamp">
+        <div class="stamp-circle">ASM<br>VERIFIED</div>
+      </div>
+      <div style="text-align:right">
+        Generated {{ profile.updated_at.strftime('%Y-%m-%d') }}<br>
+        {{ t('ያረጋግጡ','Verify') }}: {{ verify_url.replace('https://','').replace('http://','') }}<br>
+        Application No. {{ profile.application_no }}
+      </div>
+    </div>
+
+    <div class="photo-block photo-block--passport passport-page">
+      <div class="showcase-box showcase-box--passport">
+        {% if passport_doc and document_url(passport_doc) %}
+          {% if passport_doc.stored_filename.lower().endswith(('.jpg', '.jpeg', '.png')) %}
+            <img src="{{ document_url(passport_doc) }}" alt="Passport Copy">
+            <div class="verified-ribbon">VERIFIED</div>
+          {% else %}
+            <div class="photo-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1 1z"/></svg>
+              <span>Passport on file as PDF — see Verify Documents</span>
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="photo-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1 1z"/></svg>
+            <span>Passport copy pending</span>
+          </div>
+        {% endif %}
+      </div>
+      <div class="showcase-label">Passport Copy<span class="ar">نسخة جواز السفر</span></div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
