@@ -1,0 +1,41 @@
+{% extends "dashboard_base.html" %}
+{% import "_icons.html" as ic %}
+{% block title %}{{ t('ባለሁለት እርከን ማረጋገጫ','Two-Factor Authentication') }} — {{ company_name }}{% endblock %}
+{% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
+{% block page_title %}{{ t('ባለሁለት እርከን ማረጋገጫ (2FA)','Two-Factor Authentication') }}{% endblock %}
+{% block page_subtitle %}{{ t('የመለያዎን ደህንነት ያጠናክሩ','Add an extra layer of security to your account') }}{% endblock %}
+
+{% block content %}
+<div class="panel" style="max-width:520px">
+  {% if current_user.totp_enabled %}
+  <div class="panel__body" style="text-align:center">
+    <div style="width:56px;height:56px;border-radius:50%;background:#e9f8f1;color:var(--success);display:flex;align-items:center;justify-content:center;margin:0 auto 16px">{{ ic.icon('check',26) }}</div>
+    <h3 style="margin-bottom:8px">{{ t('2FA ገብቷል','2FA is enabled') }}</h3>
+    <p style="color:var(--ink-muted);font-size:14px;margin-bottom:20px">{{ t('ወደፊት በምንገቡበት ጊዜ ከይለፍ ቃል በተጨማሪ የማረጋገጫ ኮድ ይጠየቃሉ።','From now on, you\'ll be asked for a verification code in addition to your password when logging in.') }}</p>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="action" value="disable">
+      <button type="submit" class="btn btn--danger">{{ t('2FA አጥፋ','Disable 2FA') }}</button>
+    </form>
+  </div>
+  {% else %}
+  <div class="panel__body">
+    <p class="subhead" style="margin-bottom:12px">{{ t('ደረጃ 1 — ይህን ቁልፍ ወደ Authenticator App ያክሉ','Step 1 — Add this key to an authenticator app') }}</p>
+    <p style="color:var(--ink-muted);font-size:13.5px;margin-bottom:14px">{{ t('Google Authenticator ወይም Authy ይክፈቱ፣ "Enter setup key manually" ይምረጡ፣ እና ይህን ቁልፍ ይለጥፉ:','Open Google Authenticator or Authy, choose "Enter setup key manually," and paste this key:') }}</p>
+    <div style="background:var(--canvas);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center;font-family:monospace;font-size:16px;font-weight:700;letter-spacing:2px;margin-bottom:20px;word-break:break-all">{{ pending_secret }}</div>
+
+    <p class="subhead" style="margin-bottom:8px">{{ t('ደረጃ 2 — ኮድ ያረጋግጡ','Step 2 — Confirm with a code') }}</p>
+    <p style="color:var(--ink-muted);font-size:13.5px;margin-bottom:14px">{{ t('አፑ ካሳየው 6-አሃዝ ኮድ እዚህ ያስገቡ:','Enter the 6-digit code the app is now showing:') }}</p>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="action" value="enable">
+      <input type="hidden" name="pending_secret" value="{{ pending_secret }}">
+      <div class="field">
+        <input type="text" name="code" maxlength="6" pattern="[0-9]{6}" placeholder="000000" style="text-align:center;font-size:20px;letter-spacing:6px;font-weight:700" required autofocus>
+      </div>
+      <button type="submit" class="btn btn--primary btn--block">{{ ic.icon('shield',16) }} {{ t('2FA አብራ','Enable 2FA') }}</button>
+    </form>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
