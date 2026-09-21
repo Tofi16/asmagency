@@ -17,6 +17,9 @@
   .toolbar{max-width:860px;margin:0 auto 16px;display:flex;justify-content:flex-end;gap:10px}
   .toolbar button{font-family:inherit;font-weight:700;font-size:13px;padding:10px 16px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--authority);cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 2px 6px rgba(23,43,53,.05)}
   .toolbar button.primary{background:var(--authority);color:#fff;border-color:var(--authority)}
+  .toolbar__share{font-family:inherit;font-weight:700;font-size:13px;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--authority);cursor:pointer;display:inline-flex;align-items:center;text-decoration:none}
+  .toolbar__share:hover{border-color:var(--pro-blue);color:var(--pro-blue)}
+  .toolbar__share--whatsapp{color:#158b4a;border-color:#b9e7cb}
 
   .sheet{max-width:860px;margin:0 auto;background:#fff;box-shadow:var(--paper-shadow);border-radius:10px;overflow:hidden}
   .accent-bar{height:7px;background:linear-gradient(90deg,var(--authority) 0 62%,var(--pro-blue) 62% 84%,var(--trust-red) 84%)}
@@ -102,6 +105,7 @@
     body{padding:10px 6px;font-size:12px}
     .toolbar{flex-direction:column;gap:8px}
     .toolbar button{width:100%;justify-content:center;min-height:42px}
+    .toolbar__share{width:100%;justify-content:center;min-height:42px}
     .sheet{border-radius:7px}
     .sheet__inner{padding:18px 14px}
     .doc-head{flex-wrap:wrap;justify-content:center;text-align:center;padding:14px 12px;gap:12px}
@@ -182,6 +186,11 @@
 
 <div class="toolbar">
   <button onclick="window.print()" class="primary">🖨️ {{ t('አትም / PDF አውርድ','Print / Download PDF') }}</button>
+  {% set share_url = verify_url %}
+  {% set share_text = 'CV — ' ~ applicant.full_name ~ ' | Application #' ~ profile.application_no %}
+  <a href="https://wa.me/?text={{ (share_text ~ ' ' ~ share_url)|urlencode }}" target="_blank" rel="noopener" class="toolbar__share toolbar__share--whatsapp">{{ t('WhatsApp','WhatsApp') }}</a>
+  <a href="mailto:?subject={{ share_text|urlencode }}&body={{ (share_text ~ '\n' ~ share_url)|urlencode }}" class="toolbar__share">{{ t('ኢሜይል','Email') }}</a>
+  <button type="button" class="toolbar__share" data-copy-url="{{ share_url }}">{{ t('ሊንክ ቅዳ','Copy link') }}</button>
   <button onclick="window.close()">✕ {{ t('ዝጋ','Close') }}</button>
 </div>
 
@@ -349,6 +358,20 @@
 
   </div>
 </div>
+
+<script>
+document.querySelectorAll('[data-copy-url]').forEach(function (button) {
+  button.addEventListener('click', async function () {
+    try {
+      await navigator.clipboard.writeText(button.dataset.copyUrl);
+      button.textContent = 'Copied';
+      setTimeout(function () { button.textContent = 'Copy link'; }, 1400);
+    } catch (error) {
+      window.prompt('Copy verification link:', button.dataset.copyUrl);
+    }
+  });
+});
+</script>
 
 </body>
 </html>

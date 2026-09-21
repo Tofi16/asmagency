@@ -3,9 +3,19 @@
 {% block title %}{{ t('CV ገንቢ','CV Builder') }} — {{ company_name }}{% endblock %}
 {% block sidebar_nav %}{% include "admin/_nav.html" %}{% endblock %}
 {% block page_title %}{{ t('CV ገንቢ','CV Builder') }}{% endblock %}
-{% block page_subtitle %}{{ t('ለቀጣሪዎች የሚላክ ፕሮፌሽናል CV ይፍጠሩ','Create professional employer-facing CVs') }}{% endblock %}
+{% block page_subtitle %}{{ t('ለቀጣሪዎች የሚላኩ ሙያዊ CVዎችን ይፍጠሩ፣ ያስቀምጡ እና ያጋሩ','Create, save, export, and share employer-ready CVs') }}{% endblock %}
 
 {% block content %}
+<div class="cv-library-hero">
+  <div class="cv-library-hero__icon">{{ ic.icon('file',26) }}</div>
+  <div class="cv-library-hero__copy">
+    <div class="cv-library-hero__eyebrow">{{ t('የCV ላይብረሪ','CV LIBRARY') }}</div>
+    <h2>{{ t('የተደራጀ የCV ስርዓት','A sharper CV workflow') }}</h2>
+    <p>{{ t('እያንዳንዱን የአመልካች ፋይል በአንድ ቦታ ይገንቡ፣ ወደ PDF ያውርዱ እና በፍጥነት ያጋሩ።','Build every candidate file in one place, export a polished PDF, and share it in seconds.') }}</p>
+  </div>
+  <div class="cv-library-hero__stats"><strong>{{ profiles|length }}</strong><span>{{ t('የተቀመጡ CVዎች','Saved CVs') }}</span></div>
+</div>
+
 {% if applicants_without_cv %}
 <div class="panel">
   <div class="panel__head"><h3>{{ t('CV ገና ላልተፈጠረላቸው','Applicants Without a CV Yet') }}</h3></div>
@@ -27,24 +37,28 @@
 </div>
 {% endif %}
 
-<div class="panel">
-  <div class="panel__head"><h3>{{ t('የተፈጠሩ CVዎች','CVs on File') }}</h3></div>
+<div class="panel cv-library-panel">
+  <div class="panel__head cv-library-panel__head"><div><h3>{{ t('የተፈጠሩ CVዎች','Saved CVs') }}</h3><p>{{ t('የተዘጋጁ የአመልካች ሰነዶች','Employer-ready candidate documents') }}</p></div><span class="cv-count">{{ profiles|length }} {{ t('CV','CVs') }}</span></div>
   {% if profiles %}
   <div class="table-wrap">
     <table class="tbl2">
-      <thead><tr><th>{{ t('ማመልከቻ ቁ.','App. No') }}</th><th>{{ t('አመልካች','Applicant') }}</th><th>{{ t('የተመለከተው ስራ','Post Applied For') }}</th><th>{{ t('አጋር','Partner') }}</th><th>{{ t('እርምጃ','Actions') }}</th></tr></thead>
+      <thead><tr><th>{{ t('ሰነድ','Document') }}</th><th>{{ t('አመልካች','Applicant') }}</th><th>{{ t('የተመለከተው ስራ','Role') }}</th><th>{{ t('አጋር','Partner') }}</th><th>{{ t('ማጋራት እና ማውረድ','Share & export') }}</th></tr></thead>
       <tbody>
         {% for p in profiles %}
         <tr>
-          <td style="font-family:'Poppins';font-weight:700">#{{ p.application_no }}</td>
+          <td><div class="cv-doc-id"><span class="cv-doc-id__icon">{{ ic.icon('file',18) }}</span><span><strong>CV #{{ p.application_no }}</strong><small>{{ t('የተሟላ መገለጫ','Complete profile') }}</small></span></div></td>
           <td class="row-person"><span class="avatar">{{ p.applicant.full_name[0] | upper }}</span><span class="row-person__name">{{ p.applicant.full_name }}</span></td>
           <td>{{ p.post_applied_for or '—' }}</td>
           <td>{{ p.partner.name if p.partner else '—' }}</td>
-          <td class="tbl-actions">
-            <a href="{{ url_for('admin.cv_form', applicant_id=p.applicant_id) }}" class="btn btn--sm btn--ghost">{{ ic.icon('file',14) }} {{ t('CV ገንቢ ክፈት','Open CV Builder') }}</a>
-            <a href="{{ url_for('admin.cv_export_docx', applicant_id=p.applicant_id) }}" class="btn btn--sm btn--ghost">{{ ic.icon('upload',14) }} {{ t('Word','Word') }}</a>
-            <a href="{{ url_for('admin.cv_print', applicant_id=p.applicant_id) }}" target="_blank" class="btn btn--sm btn--primary">{{ ic.icon('file',14) }} {{ t('አትም','Print / PDF') }}</a>
-          </td>
+          {% set share_url = url_for('main.verify_cv', application_no=p.application_no, _external=True) %}
+          {% set share_text = 'CV — ' ~ p.applicant.full_name ~ ' | Application #' ~ p.application_no %}
+          <td><div class="cv-actions">
+            <a href="{{ url_for('admin.cv_form', applicant_id=p.applicant_id) }}" class="icon-action" title="{{ t('CV አርትዕ','Edit CV') }}" aria-label="{{ t('CV አርትዕ','Edit CV') }}">{{ ic.icon('edit',16) }}</a>
+            <a href="{{ url_for('admin.cv_print', applicant_id=p.applicant_id) }}" target="_blank" class="icon-action icon-action--primary" title="{{ t('PDF ይክፈቱ','Open PDF / print view') }}" aria-label="{{ t('PDF ይክፈቱ','Open PDF / print view') }}">{{ ic.icon('download',16) }}</a>
+            <a href="https://wa.me/?text={{ (share_text ~ ' ' ~ share_url)|urlencode }}" target="_blank" rel="noopener" class="icon-action icon-action--whatsapp" title="{{ t('በWhatsApp ያጋሩ','Share on WhatsApp') }}" aria-label="{{ t('በWhatsApp ያጋሩ','Share on WhatsApp') }}">{{ ic.icon('share',16) }}</a>
+            <a href="mailto:?subject={{ share_text|urlencode }}&body={{ (share_text ~ '\n' ~ share_url)|urlencode }}" class="icon-action" title="{{ t('በኢሜይል ያጋሩ','Share by email') }}" aria-label="{{ t('በኢሜይል ያጋሩ','Share by email') }}">{{ ic.icon('mail',16) }}</a>
+            <button type="button" class="icon-action" data-copy-url="{{ share_url }}" title="{{ t('ሊንኩን ቅዳ','Copy verification link') }}" aria-label="{{ t('ሊንኩን ቅዳ','Copy verification link') }}">{{ ic.icon('link',16) }}</button>
+          </div></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -57,4 +71,21 @@
   </div>
   {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.querySelectorAll('[data-copy-url]').forEach(function (button) {
+  button.addEventListener('click', async function () {
+    try {
+      await navigator.clipboard.writeText(button.dataset.copyUrl);
+      button.classList.add('is-copied');
+      button.setAttribute('title', 'Copied');
+      setTimeout(function () { button.classList.remove('is-copied'); }, 1400);
+    } catch (error) {
+      window.prompt('Copy verification link:', button.dataset.copyUrl);
+    }
+  });
+});
+</script>
 {% endblock %}
